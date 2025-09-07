@@ -4,9 +4,45 @@ import type { NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
-  // For now, bypass all tenant validation to fix deployment
-  // TODO: Re-enable tenant validation after fixing database connection
-  
+  // Routes that don't need tenant context
+  const publicRoutes = [
+    '/',
+    '/pricing',
+    '/auth',
+    '/api/auth',
+    '/api/webhooks',
+    '/_next',
+    '/favicon.ico',
+  ]
+
+  // Check if it's a public route
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route))
+  if (isPublicRoute) {
+    return NextResponse.next()
+  }
+
+  // Check if it's a tenant route
+  if (pathname.startsWith('/tenants/')) {
+    // Extract tenant slug from URL
+    const parts = pathname.split('/')
+    const tenantSlug = parts[2] // /tenants/[slug]/...
+    
+    if (tenantSlug) {
+      const response = NextResponse.next()
+      
+      // Add tenant info to headers for downstream use
+      response.headers.set('x-tenant-slug', tenantSlug)
+      
+      // Add security headers
+      response.headers.set('x-frame-options', 'DENY')
+      response.headers.set('x-content-type-options', 'nosniff')
+      response.headers.set('referrer-policy', 'strict-origin-when-cross-origin')
+      
+      return response
+    }
+  }
+
+  // For all other routes, proceed normally
   const response = NextResponse.next()
   
   // Add security headers
