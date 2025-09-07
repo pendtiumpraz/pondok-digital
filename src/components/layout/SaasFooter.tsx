@@ -90,7 +90,7 @@ export default function SaasFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/api-docs" className="hover:text-white">
+                <Link href="/docs" className="hover:text-white">
                   {t.apiDocs}
                 </Link>
               </li>

@@ -32,29 +32,29 @@ export default function HomePage() {
 
   // Translations
   const t = {
-    badge: 'Platform Digital Pesantren Modern',
-    heroTitle: 'Platform Digital untuk',
-    heroHighlight: 'Pesantren Modern',
-    heroSubtitle: 'Kelola pesantren, sekolah Islam, dan yayasan Anda dengan sistem terintegrasi yang mudah digunakan',
-    heroDescription: 'Transformasi digital pesantren Anda dengan platform all-in-one yang mengelola akademik, keuangan, SDM, dan operasional dalam satu sistem terintegrasi.',
-    startTrial: 'Mulai Uji Coba Gratis',
+    badge: '🚀 Solusi #1 Pesantren Digital',
+    heroTitle: 'Kelola Pesantren',
+    heroHighlight: 'Jadi Mudah!',
+    heroSubtitle: 'Satu aplikasi untuk semua kebutuhan pesantren Anda',
+    heroDescription: 'Akademik, keuangan, santri. Semua dalam genggaman.',
+    startTrial: 'Coba Gratis 14 Hari',
     viewPricing: 'Lihat Harga',
-    noSetupFees: 'Tanpa biaya setup',
+    noSetupFees: 'Gratis setup',
     cancelAnytime: 'Batal kapan saja',
     support247: 'Support 24/7',
-    featuresTitle: 'Fitur Lengkap',
-    featuresHighlight: 'untuk Pesantren Modern',
-    featuresSubtitle: 'Semua yang Anda butuhkan untuk mengelola pesantren dalam satu platform',
-    benefitsTitle: 'Keuntungan Menggunakan',
-    benefitsHighlight: 'Pondok Digital',
-    benefitsSubtitle: 'Platform terpadu yang dirancang khusus untuk kebutuhan pesantren Indonesia',
-    trustedTitle: 'Dipercaya oleh Pesantren Terkemuka',
-    trustedSubtitle: 'Bergabung dengan ratusan pesantren yang telah bertransformasi digital',
+    featuresTitle: 'Fitur',
+    featuresHighlight: 'Unggulan',
+    featuresSubtitle: 'Yang bikin pesantren makin produktif',
+    benefitsTitle: 'Kenapa',
+    benefitsHighlight: 'Pondok Digital?',
+    benefitsSubtitle: 'Karena kami paham kebutuhan pesantren',
+    trustedTitle: 'Dipercaya 100+ Pesantren',
+    trustedSubtitle: 'Di seluruh Indonesia',
     reviews: 'ulasan',
-    readyTitle: 'Siap Modernisasi Pesantren Anda?',
-    readySubtitle: 'Bergabung dengan ratusan pesantren yang telah meningkatkan efisiensi operasional hingga 80%',
-    scheduleDemo: 'Jadwalkan Demo',
-    noCredit: 'Tidak perlu kartu kredit • Setup instan • Cancel kapan saja'
+    readyTitle: 'Yuk, Mulai Sekarang!',
+    readySubtitle: 'Join 100+ pesantren yang sudah go digital',
+    scheduleDemo: 'Minta Demo',
+    noCredit: 'Gratis trial • Tanpa kartu kredit • 5 menit setup'
   };
 
   const fadeInUp = {
@@ -73,78 +73,78 @@ export default function HomePage() {
   const features = [
     {
       icon: CloudIcon,
-      title: 'Multi-Tenant SaaS',
-      description: 'Isolasi lengkap untuk setiap yayasan dengan branding dan domain khusus',
+      title: 'Multi Yayasan',
+      description: 'Satu sistem, banyak cabang. Mudah!',
       color: 'from-blue-400 to-indigo-600',
       href: '/features',
     },
     {
       icon: ChartBarIcon,
-      title: 'Analitik Canggih',
-      description: 'Dashboard real-time dengan insight mendalam dan laporan yang dapat disesuaikan',
+      title: 'Laporan Otomatis',
+      description: 'Dashboard real-time. Gak ribet.',
       color: 'from-emerald-400 to-green-600',
       href: '/features',
     },
     {
       icon: CogIcon,
-      title: 'Konfigurasi Fleksibel',
-      description: 'Opsi kustomisasi ekstensif untuk menyesuaikan platform dengan kebutuhan Anda',
+      title: 'Super Fleksibel',
+      description: 'Sesuaikan dengan kebutuhan Anda',
       color: 'from-purple-400 to-pink-600',
       href: '/features',
     },
     {
       icon: ShieldCheckIcon,
-      title: 'Keamanan Enterprise',
-      description: 'Keamanan tingkat bank dengan enkripsi data dan proteksi berlapis',
+      title: 'Aman 100%',
+      description: 'Data terenkripsi. Privasi terjaga.',
       color: 'from-orange-400 to-red-600',
       href: '/features',
     },
     {
       icon: GlobeAltIcon,
-      title: 'Skala Global',
-      description: 'Deploy dimana saja dengan dukungan multi-region dan jaminan uptime 99.9%',
+      title: 'Akses Dimana Saja',
+      description: 'HP, laptop, tablet. Bebas!',
       color: 'from-teal-400 to-cyan-600',
       href: '/features',
     },
     {
       icon: UsersIcon,
-      title: 'Kolaborasi Tim',
-      description: 'Manajemen pengguna canggih dengan izin berbasis peran dan workflow tim',
+      title: 'Tim Kolaborasi',
+      description: 'Kerja bareng jadi gampang',
       color: 'from-yellow-400 to-amber-600',
       href: '/features',
     },
   ];
 
   const stats = [
-    { label: 'Yayasan Aktif', value: 100, suffix: '+', icon: BuildingOfficeIcon },
-    { label: 'Pengguna Bulanan', value: 15000, suffix: '+', icon: UsersIcon },
+    { label: 'Yayasan', value: 100, suffix: '+', icon: BuildingOfficeIcon },
+    { label: 'Pengguna', value: 15000, suffix: '+', icon: UsersIcon },
     { label: 'Uptime', value: 99.9, suffix: '%', icon: ShieldCheckIcon },
-    { label: 'Provinsi', value: 20, suffix: '+', icon: GlobeAltIcon },
+    { label: 'Kota', value: 50, suffix: '+', icon: GlobeAltIcon },
   ];
 
   const benefits = [
     {
       icon: RocketLaunchIcon,
-      title: 'Rapid Deployment',
-      description: 'Launch your tenant in minutes, not months',
+      title: 'Setup 5 Menit',
+      description: 'Langsung pakai. Gak ribet.',
       color: 'from-blue-500 to-indigo-600'
     },
     {
       icon: CurrencyDollarIcon,
-      title: 'Cost Effective',
-      description: 'Reduce infrastructure costs by up to 70%',
+      title: 'Hemat 70%',
+      description: 'Biaya operasional turun drastis',
       color: 'from-green-500 to-emerald-600'
     },
     {
       icon: TrophyIcon,
-      title: 'Market Leader',
-      description: 'Trusted by industry leaders worldwide',
+      title: '#1 Indonesia',
+      description: 'Dipilih 100+ pesantren',
       color: 'from-purple-500 to-pink-600'
     },
     {
       icon: LightBulbIcon,
-      title: 'Innovation Ready',
-      description: 'Built for the future with cutting-edge technology',
+      title: 'Fitur Baru Terus',
+      description: 'Update tiap bulan. Gratis!',
       color: 'from-amber-500 to-orange-600'
     },
   ];
