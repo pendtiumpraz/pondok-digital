@@ -53,7 +53,7 @@ export default function TenantHeader({ tenantName }: TenantHeaderProps) {
           {/* Login Button */}
           <div className="hidden md:block">
             <Button variant="secondary" size="sm" asChild>
-              <Link href="/auth/signin">Masuk</Link>
+              <Link href={`/yayasan/${slug}/auth/signin`}>Masuk</Link>
             </Button>
           </div>
 
@@ -81,7 +81,7 @@ export default function TenantHeader({ tenantName }: TenantHeaderProps) {
             ))}
             <div className="pt-4 border-t border-green-600 mt-4">
               <Button variant="secondary" size="sm" asChild className="w-full">
-                <Link href="/auth/signin">Masuk</Link>
+                <Link href={`/yayasan/${slug}/auth/signin`}>Masuk</Link>
               </Button>
             </div>
           </nav>

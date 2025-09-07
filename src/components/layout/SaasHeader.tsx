@@ -44,10 +44,10 @@ export default function SaasHeader() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <Button variant="outline" asChild>
-              <Link href="/auth/signin">Masuk</Link>
+              <Link href="/auth/admin-signin">Login Admin</Link>
             </Button>
             <Button asChild>
-              <Link href="/auth/register">Daftar Gratis</Link>
+              <Link href="/auth/register-yayasan">Daftar Yayasan</Link>
             </Button>
           </div>
 
@@ -79,10 +79,10 @@ export default function SaasHeader() {
             ))}
             <div className="pt-4 border-t mt-4 space-y-2">
               <Button variant="outline" asChild className="w-full">
-                <Link href="/auth/signin">Masuk</Link>
+                <Link href="/auth/admin-signin">Login Admin</Link>
               </Button>
               <Button asChild className="w-full">
-                <Link href="/auth/register">Daftar Gratis</Link>
+                <Link href="/auth/register-yayasan">Daftar Yayasan</Link>
               </Button>
             </div>
           </nav>
