@@ -3,13 +3,12 @@
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
-interface TenantFooterProps {
-  tenantName: string
-}
-
-export default function TenantFooter({ tenantName }: TenantFooterProps) {
+export default function TenantFooter() {
   const params = useParams()
   const slug = params.slug as string
+  const tenantName = slug === 'imam-syafii' 
+    ? 'Pondok Pesantren Imam Syafii Blitar'
+    : slug
 
   return (
     <footer className="bg-gray-800 text-white mt-auto">

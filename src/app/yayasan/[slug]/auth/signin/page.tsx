@@ -52,7 +52,7 @@ export default function YayasanSignInPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <TenantHeader tenantName={tenantName} />
+      <TenantHeader />
       <div className="flex-grow flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-green-50 py-12">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
@@ -144,7 +144,7 @@ export default function YayasanSignInPage() {
           </CardContent>
         </Card>
       </div>
-      <TenantFooter tenantName={tenantName} />
+      <TenantFooter />
     </div>
   )
 }
