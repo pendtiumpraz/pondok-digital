@@ -13,10 +13,10 @@ export default function SaasHeader() {
     id: {
       menu: [
         { label: 'Beranda', href: '/' },
-        { label: 'Fitur', href: '#features' },
+        { label: 'Fitur', href: '/features' },
         { label: 'Harga', href: '/pricing' },
         { label: 'Demo', href: '/yayasan/imam-syafii', target: '_blank' },
-        { label: 'Kontak', href: '#contact' },
+        { label: 'Kontak', href: '/contact' },
       ],
       loginAdmin: 'Masuk Admin',
       registerYayasan: 'Daftar Yayasan',
@@ -25,10 +25,10 @@ export default function SaasHeader() {
     en: {
       menu: [
         { label: 'Home', href: '/' },
-        { label: 'Features', href: '#features' },
+        { label: 'Features', href: '/features' },
         { label: 'Pricing', href: '/pricing' },
         { label: 'Demo', href: '/yayasan/imam-syafii', target: '_blank' },
-        { label: 'Contact', href: '#contact' },
+        { label: 'Contact', href: '/contact' },
       ],
       loginAdmin: 'Admin Login',
       registerYayasan: 'Register Foundation',

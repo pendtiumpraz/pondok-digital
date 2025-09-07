@@ -32,90 +32,90 @@ const PricingPage = () => {
     {
       id: 'starter',
       name: 'Starter',
-      description: 'Perfect for small teams getting started',
+      description: 'Sempurna untuk yayasan kecil yang baru memulai',
       icon: SparklesIcon,
       color: 'from-blue-500 to-indigo-600',
       pricing: {
-        monthly: 29,
-        annual: 290, // 2 months free
+        monthly: 299000,
+        annual: 2990000, // 2 bulan gratis
       },
       features: [
-        'Up to 5 team members',
-        'Basic dashboard',
-        '10GB storage',
-        'Email support',
-        'Basic analytics',
-        'Standard templates',
-        'Mobile app access',
-        'API access (100 calls/day)',
+        'Hingga 5 anggota tim',
+        'Dashboard dasar',
+        'Penyimpanan 10GB',
+        'Dukungan email',
+        'Analitik dasar',
+        'Template standar',
+        'Akses aplikasi mobile',
+        'Akses API (100 panggilan/hari)',
       ],
       limitations: [
-        'Limited customization',
-        'No white-labeling',
-        'Basic reporting only',
-        'No priority support',
+        'Kustomisasi terbatas',
+        'Tidak ada white-labeling',
+        'Laporan dasar saja',
+        'Tidak ada dukungan prioritas',
       ],
       popular: false,
     },
     {
       id: 'pro',
       name: 'Professional',
-      description: 'Most popular for growing businesses',
+      description: 'Paling populer untuk yayasan yang berkembang',
       icon: ChartBarIcon,
       color: 'from-emerald-500 to-green-600',
       pricing: {
-        monthly: 79,
-        annual: 790, // 2 months free
+        monthly: 799000,
+        annual: 7990000, // 2 bulan gratis
       },
       features: [
-        'Up to 25 team members',
-        'Advanced dashboard',
-        '100GB storage',
-        'Priority email & chat support',
-        'Advanced analytics & reporting',
-        'Custom templates',
-        'Mobile app access',
-        'API access (1,000 calls/day)',
-        'Custom integrations',
-        'Role-based permissions',
-        'Data export',
-        'Audit logs',
+        'Hingga 25 anggota tim',
+        'Dashboard lanjutan',
+        'Penyimpanan 100GB',
+        'Dukungan prioritas email & chat',
+        'Analitik & laporan lanjutan',
+        'Template kustom',
+        'Akses aplikasi mobile',
+        'Akses API (1.000 panggilan/hari)',
+        'Integrasi kustom',
+        'Izin berbasis peran',
+        'Ekspor data',
+        'Log audit',
       ],
       limitations: [
-        'Limited white-labeling',
-        'Standard SLA',
+        'White-labeling terbatas',
+        'SLA standar',
       ],
       popular: true,
     },
     {
       id: 'enterprise',
       name: 'Enterprise',
-      description: 'For large organizations with advanced needs',
+      description: 'Untuk yayasan besar dengan kebutuhan lanjutan',
       icon: ShieldCheckIcon,
       color: 'from-purple-500 to-pink-600',
       pricing: {
-        monthly: 199,
-        annual: 1990, // 2 months free
+        monthly: 1999000,
+        annual: 19990000, // 2 bulan gratis
       },
       features: [
-        'Unlimited team members',
-        'Enterprise dashboard',
-        'Unlimited storage',
-        '24/7 phone & chat support',
-        'Enterprise analytics',
-        'Fully custom templates',
-        'Mobile app access',
-        'Unlimited API access',
-        'Custom integrations',
-        'Advanced permissions',
-        'Data export',
-        'Full audit logs',
-        'Complete white-labeling',
-        'Custom domain',
-        'SSO integration',
-        'Advanced security',
-        'SLA guarantee',
-        'Dedicated account manager',
+        'Anggota tim tidak terbatas',
+        'Dashboard enterprise',
+        'Penyimpanan tidak terbatas',
+        'Dukungan 24/7 telepon & chat',
+        'Analitik enterprise',
+        'Template kustom penuh',
+        'Akses aplikasi mobile',
+        'Akses API tidak terbatas',
+        'Integrasi kustom',
+        'Izin lanjutan',
+        'Ekspor data',
+        'Log audit penuh',
+        'White-labeling lengkap',
+        'Domain kustom',
+        'Integrasi SSO',
+        'Keamanan lanjutan',
+        'Jaminan SLA',
+        'Manajer akun khusus',
       ],
       limitations: [],
       popular: false,
@@ -124,61 +124,65 @@ const PricingPage = () => {
 
   const addOns = [
     {
-      name: 'Additional Users',
-      description: 'Extra team members beyond plan limit',
-      pricing: { monthly: 5, annual: 50 },
-      unit: 'per user/month',
+      name: 'Pengguna Tambahan',
+      description: 'Anggota tim ekstra melebihi batas paket',
+      pricing: { monthly: 50000, annual: 500000 },
+      unit: 'per pengguna/bulan',
     },
     {
-      name: 'Extra Storage',
-      description: 'Additional storage beyond plan limit',
-      pricing: { monthly: 10, annual: 100 },
-      unit: 'per 100GB/month',
+      name: 'Penyimpanan Ekstra',
+      description: 'Penyimpanan tambahan melebihi batas paket',
+      pricing: { monthly: 100000, annual: 1000000 },
+      unit: 'per 100GB/bulan',
     },
     {
-      name: 'Premium Support',
-      description: '24/7 priority support with dedicated agent',
-      pricing: { monthly: 29, annual: 290 },
-      unit: 'per month',
+      name: 'Dukungan Premium',
+      description: 'Dukungan prioritas 24/7 dengan agen khusus',
+      pricing: { monthly: 290000, annual: 2900000 },
+      unit: 'per bulan',
     },
     {
-      name: 'Advanced Security',
-      description: 'Enhanced security features and compliance',
-      pricing: { monthly: 49, annual: 490 },
-      unit: 'per month',
+      name: 'Keamanan Lanjutan',
+      description: 'Fitur keamanan ditingkatkan dan kepatuhan',
+      pricing: { monthly: 490000, annual: 4900000 },
+      unit: 'per bulan',
     },
   ];
 
   const faq = [
     {
-      question: 'How does the pricing work?',
-      answer: 'Our pricing is based on the plan you choose and the number of users. Each plan includes a base number of users, and you can add more as needed. Annual plans save you 2 months compared to monthly billing.',
+      question: 'Bagaimana sistem harga bekerja?',
+      answer: 'Harga kami berdasarkan paket yang Anda pilih dan jumlah pengguna. Setiap paket mencakup jumlah pengguna dasar, dan Anda dapat menambahkan lebih banyak sesuai kebutuhan. Paket tahunan menghemat 2 bulan dibandingkan tagihan bulanan.',
     },
     {
-      question: 'Can I change plans anytime?',
-      answer: 'Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately, and billing is prorated.',
+      question: 'Bisakah saya mengubah paket kapan saja?',
+      answer: 'Ya! Anda dapat meningkatkan atau menurunkan paket Anda kapan saja. Perubahan berlaku segera, dan tagihan akan disesuaikan secara proporsional.',
     },
     {
-      question: 'What happens to my data if I cancel?',
-      answer: 'Your data is safely stored for 30 days after cancellation. You can export all your data during this period. After 30 days, data is permanently deleted.',
+      question: 'Apa yang terjadi pada data saya jika saya membatalkan?',
+      answer: 'Data Anda tersimpan dengan aman selama 30 hari setelah pembatalan. Anda dapat mengekspor semua data Anda selama periode ini. Setelah 30 hari, data akan dihapus secara permanen.',
     },
     {
-      question: 'Do you offer custom enterprise plans?',
-      answer: 'Yes! For large organizations with specific needs, we offer custom enterprise plans with tailored features, pricing, and support.',
+      question: 'Apakah Anda menawarkan paket enterprise kustom?',
+      answer: 'Ya! Untuk yayasan besar dengan kebutuhan khusus, kami menawarkan paket enterprise kustom dengan fitur, harga, dan dukungan yang disesuaikan.',
     },
     {
-      question: 'Is there a free trial?',
-      answer: 'Yes! All plans come with a 14-day free trial. No credit card required to start.',
+      question: 'Apakah ada uji coba gratis?',
+      answer: 'Ya! Semua paket dilengkapi dengan uji coba gratis 14 hari. Tidak perlu kartu kredit untuk memulai.',
     },
     {
-      question: 'What payment methods do you accept?',
-      answer: 'We accept all major credit cards, PayPal, and bank transfers for enterprise customers. All payments are processed securely.',
+      question: 'Metode pembayaran apa yang Anda terima?',
+      answer: 'Kami menerima semua kartu kredit utama, PayPal, dan transfer bank untuk pelanggan enterprise. Semua pembayaran diproses dengan aman.',
     },
   ];
 
   const calculatePrice = (plan: typeof plans[0]) => {
     const basePrice = plan.pricing[billingCycle];
     return billingCycle === 'annual' ? basePrice / 12 : basePrice;
+  };
+
+  const formatRupiah = (amount: number) => {
+    return new Intl.NumberFormat('id-ID').format(amount);
   };
 
   const getSavings = (plan: typeof plans[0]) => {
@@ -200,16 +204,16 @@ const PricingPage = () => {
               className="text-center mb-12"
             >
               <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-6">
-                Simple, <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Transparent</span> Pricing
+                Harga yang <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Sederhana & Transparan</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Choose the perfect plan for your business. Start with a free trial and scale as you grow.
+                Pilih paket yang sempurna untuk yayasan Anda. Mulai dengan uji coba gratis dan berkembang seiring pertumbuhan yayasan.
               </p>
               
               {/* Billing Toggle */}
               <div className="flex items-center justify-center gap-4 mb-8">
                 <span className={`text-lg font-medium ${billingCycle === 'monthly' ? 'text-gray-900' : 'text-gray-500'}`}>
-                  Monthly
+                  Bulanan
                 </span>
                 <button
                   onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'annual' : 'monthly')}
@@ -225,10 +229,10 @@ const PricingPage = () => {
                 </button>
                 <div className="flex items-center gap-2">
                   <span className={`text-lg font-medium ${billingCycle === 'annual' ? 'text-gray-900' : 'text-gray-500'}`}>
-                    Annual
+                    Tahunan
                   </span>
                   <span className="bg-green-100 text-green-800 text-sm font-medium px-2 py-1 rounded-full">
-                    Save 2 months
+                    Hemat 2 bulan
                   </span>
                 </div>
               </div>
@@ -248,7 +252,7 @@ const PricingPage = () => {
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                       <div className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-6 py-2 rounded-full text-sm font-medium flex items-center gap-2">
                         <StarIcon className="w-4 h-4" />
-                        Most Popular
+                        Paling Populer
                       </div>
                     </div>
                   )}
@@ -272,13 +276,13 @@ const PricingPage = () => {
                       <div className="text-center mb-8">
                         <div className="flex items-baseline justify-center gap-1">
                           <span className="text-5xl font-bold text-gray-900">
-                            ${calculatePrice(plan).toFixed(0)}
+                            Rp {formatRupiah(calculatePrice(plan))}
                           </span>
-                          <span className="text-lg text-gray-600">/month</span>
+                          <span className="text-lg text-gray-600">/{billingCycle === 'monthly' ? 'bulan' : 'tahun'}</span>
                         </div>
                         {billingCycle === 'annual' && (
                           <div className="text-green-600 text-sm font-medium mt-2">
-                            Save ${getSavings(plan)} per year
+                            Hemat Rp {formatRupiah(getSavings(plan))} per tahun
                           </div>
                         )}
                       </div>
@@ -293,7 +297,7 @@ const PricingPage = () => {
                                 : 'bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black'
                             } text-white`}
                           >
-                            Start Free Trial
+                            Mulai Uji Coba Gratis
                             <ArrowRightIcon className="w-5 h-5 ml-2" />
                           </Button>
                         </Link>
@@ -301,7 +305,7 @@ const PricingPage = () => {
 
                       {/* Features */}
                       <div className="space-y-4">
-                        <h4 className="font-semibold text-gray-900 text-lg">What's included:</h4>
+                        <h4 className="font-semibold text-gray-900 text-lg">Yang termasuk:</h4>
                         <ul className="space-y-3">
                           {plan.features.map((feature, featureIndex) => (
                             <li key={featureIndex} className="flex items-start gap-3">
@@ -313,7 +317,7 @@ const PricingPage = () => {
 
                         {plan.limitations.length > 0 && (
                           <div className="mt-6 pt-6 border-t border-gray-200">
-                            <h5 className="font-medium text-gray-700 mb-3">Limitations:</h5>
+                            <h5 className="font-medium text-gray-700 mb-3">Keterbatasan:</h5>
                             <ul className="space-y-2">
                               {plan.limitations.map((limitation, limIndex) => (
                                 <li key={limIndex} className="flex items-start gap-3">
@@ -339,19 +343,19 @@ const PricingPage = () => {
               className="text-center mt-16"
             >
               <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 text-white max-w-4xl mx-auto">
-                <h3 className="text-3xl font-bold mb-4">Need something more custom?</h3>
+                <h3 className="text-3xl font-bold mb-4">Butuh sesuatu yang lebih khusus?</h3>
                 <p className="text-xl text-purple-100 mb-8">
-                  Contact our sales team for custom enterprise solutions with tailored pricing, features, and support.
+                  Hubungi tim penjualan kami untuk solusi enterprise kustom dengan harga, fitur, dan dukungan yang disesuaikan.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href="/contact">
                     <Button className="bg-white text-purple-700 hover:bg-gray-100 font-semibold px-8 py-3">
-                      Contact Sales
+                      Hubungi Tim Penjualan
                     </Button>
                   </Link>
                   <Link href="/demo">
                     <Button className="bg-purple-700/20 text-white border-2 border-white/20 hover:bg-purple-700/30 font-semibold px-8 py-3">
-                      Schedule Demo
+                      Jadwalkan Demo
                     </Button>
                   </Link>
                 </div>
@@ -370,10 +374,10 @@ const PricingPage = () => {
               className="text-center mb-16"
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Enhance Your Plan with <span className="text-indigo-600">Add-ons</span>
+                Tingkatkan Paket Anda dengan <span className="text-indigo-600">Add-ons</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Customize your plan with additional features and services to meet your specific needs.
+                Sesuaikan paket Anda dengan fitur dan layanan tambahan untuk memenuhi kebutuhan spesifik Anda.
               </p>
             </motion.div>
 
@@ -394,13 +398,13 @@ const PricingPage = () => {
                       </div>
                       <div className="text-right flex-shrink-0 ml-4">
                         <div className="text-2xl font-bold text-gray-900">
-                          ${addon.pricing[billingCycle]}
+                          Rp {formatRupiah(addon.pricing[billingCycle])}
                         </div>
                         <div className="text-sm text-gray-600">{addon.unit}</div>
                       </div>
                     </div>
                     <Button variant="outline" className="w-full">
-                      Add to Plan
+                      Tambahkan ke Paket
                     </Button>
                   </Card>
                 </motion.div>
@@ -419,10 +423,10 @@ const PricingPage = () => {
               className="text-center mb-16"
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Pricing <span className="text-indigo-600">Calculator</span>
+                Kalkulator <span className="text-indigo-600">Harga</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Customize your plan and see exactly what you'll pay with our interactive calculator.
+                Sesuaikan paket Anda dan lihat dengan tepat berapa yang akan Anda bayar dengan kalkulator interaktif kami.
               </p>
             </motion.div>
 
@@ -433,7 +437,7 @@ const PricingPage = () => {
                   <div className="space-y-6">
                     <div>
                       <label className="block text-lg font-semibold text-gray-900 mb-4">
-                        Select Plan
+                        Pilih Paket
                       </label>
                       <div className="grid grid-cols-3 gap-3">
                         {plans.map((plan) => (
@@ -455,7 +459,7 @@ const PricingPage = () => {
 
                     <div>
                       <label className="block text-lg font-semibold text-gray-900 mb-4">
-                        Team Size: {userCount} users
+                        Ukuran Tim: {userCount} pengguna
                       </label>
                       <input
                         type="range"
@@ -466,14 +470,14 @@ const PricingPage = () => {
                         className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                       />
                       <div className="flex justify-between text-sm text-gray-500 mt-2">
-                        <span>1 user</span>
-                        <span>100+ users</span>
+                        <span>1 pengguna</span>
+                        <span>100+ pengguna</span>
                       </div>
                     </div>
 
                     <div>
                       <label className="block text-lg font-semibold text-gray-900 mb-4">
-                        Billing Cycle
+                        Siklus Tagihan
                       </label>
                       <div className="flex gap-4">
                         {['monthly', 'annual'].map((cycle) => (
@@ -486,9 +490,9 @@ const PricingPage = () => {
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                           >
-                            <div className="font-semibold capitalize">{cycle}</div>
+                            <div className="font-semibold">{cycle === 'monthly' ? 'Bulanan' : 'Tahunan'}</div>
                             {cycle === 'annual' && (
-                              <div className="text-sm text-green-600">Save 17%</div>
+                              <div className="text-sm text-green-600">Hemat 17%</div>
                             )}
                           </button>
                         ))}
@@ -498,27 +502,27 @@ const PricingPage = () => {
 
                   {/* Pricing Summary */}
                   <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-2xl">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">Pricing Summary</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-6">Ringkasan Harga</h3>
                     
                     {(() => {
                       const selectedPlanData = plans.find(p => p.id === selectedPlan)!;
                       const basePrice = calculatePrice(selectedPlanData);
                       const extraUsers = Math.max(0, userCount - (selectedPlan === 'starter' ? 5 : selectedPlan === 'pro' ? 25 : 1000));
-                      const extraUserCost = extraUsers * (billingCycle === 'annual' ? 4.17 : 5);
+                      const extraUserCost = extraUsers * (billingCycle === 'annual' ? 41700 : 50000);
                       const totalMonthly = basePrice + extraUserCost;
                       const totalAnnual = totalMonthly * 12;
 
                       return (
                         <div className="space-y-4">
                           <div className="flex justify-between items-center py-3 border-b border-indigo-200">
-                            <span className="text-gray-700">Base Plan ({selectedPlanData.name})</span>
-                            <span className="font-semibold">${basePrice.toFixed(2)}/mo</span>
+                            <span className="text-gray-700">Paket Dasar ({selectedPlanData.name})</span>
+                            <span className="font-semibold">Rp {formatRupiah(basePrice)}/bln</span>
                           </div>
                           
                           {extraUsers > 0 && (
                             <div className="flex justify-between items-center py-3 border-b border-indigo-200">
-                              <span className="text-gray-700">{extraUsers} extra users</span>
-                              <span className="font-semibold">${extraUserCost.toFixed(2)}/mo</span>
+                              <span className="text-gray-700">{extraUsers} pengguna tambahan</span>
+                              <span className="font-semibold">Rp {formatRupiah(extraUserCost)}/bln</span>
                             </div>
                           )}
 
@@ -526,11 +530,11 @@ const PricingPage = () => {
                             <span className="text-xl font-bold text-gray-900">Total</span>
                             <div className="text-right">
                               <div className="text-2xl font-bold text-indigo-600">
-                                ${totalMonthly.toFixed(2)}/mo
+                                Rp {formatRupiah(totalMonthly)}/{billingCycle === 'monthly' ? 'bln' : 'thn'}
                               </div>
                               {billingCycle === 'annual' && (
                                 <div className="text-sm text-gray-600">
-                                  ${totalAnnual.toFixed(2)} billed annually
+                                  Rp {formatRupiah(totalAnnual)} ditagih tahunan
                                 </div>
                               )}
                             </div>
@@ -538,7 +542,7 @@ const PricingPage = () => {
 
                           <Link href="/onboarding">
                             <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3">
-                              Start Free Trial
+                              Mulai Uji Coba Gratis
                               <ArrowRightIcon className="w-5 h-5 ml-2" />
                             </Button>
                           </Link>
@@ -562,10 +566,10 @@ const PricingPage = () => {
               className="text-center mb-16"
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Frequently Asked <span className="text-indigo-600">Questions</span>
+                Pertanyaan yang <span className="text-indigo-600">Sering Ditanyakan</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Got questions? We've got answers. If you can't find what you're looking for, contact our support team.
+                Ada pertanyaan? Kami punya jawabannya. Jika Anda tidak dapat menemukan yang Anda cari, hubungi tim dukungan kami.
               </p>
             </motion.div>
 
@@ -607,28 +611,28 @@ const PricingPage = () => {
               className="max-w-4xl mx-auto"
             >
               <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6">
-                Ready to Get Started?
+                Siap untuk Memulai?
               </h2>
               <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-                Join thousands of businesses already using our platform to scale and grow their operations.
+                Bergabunglah dengan ribuan yayasan yang sudah menggunakan platform kami untuk mengembangkan operasi mereka.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/onboarding">
                   <Button className="bg-white text-indigo-700 hover:bg-gray-100 font-bold px-10 py-4 text-lg">
-                    Start Free Trial
+                    Mulai Uji Coba Gratis
                     <ArrowRightIcon className="w-6 h-6 ml-2" />
                   </Button>
                 </Link>
                 <Link href="/contact">
                   <Button className="bg-white/10 backdrop-blur-sm text-white border-2 border-white/20 hover:bg-white/20 font-bold px-10 py-4 text-lg">
-                    Contact Sales
+                    Hubungi Tim Penjualan
                   </Button>
                 </Link>
               </div>
 
               <div className="mt-8 text-purple-200 text-sm">
-                No credit card required • 14-day free trial • Cancel anytime
+                Tidak perlu kartu kredit • Uji coba gratis 14 hari • Batal kapan saja
               </div>
             </motion.div>
           </div>

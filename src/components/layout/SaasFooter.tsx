@@ -25,7 +25,7 @@ export default function SaasFooter() {
             <h3 className="font-semibold text-lg mb-4">Produk</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <Link href="#features" className="hover:text-white">
+                <Link href="/features" className="hover:text-white">
                   Fitur
                 </Link>
               </li>
@@ -40,8 +40,8 @@ export default function SaasFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
-                  API Docs
+                <Link href="/api-docs" className="hover:text-white">
+                  Dokumentasi API
                 </Link>
               </li>
             </ul>
@@ -52,22 +52,22 @@ export default function SaasFooter() {
             <h3 className="font-semibold text-lg mb-4">Perusahaan</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link href="/about" className="hover:text-white">
                   Tentang Kami
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link href="/blog" className="hover:text-white">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link href="/careers" className="hover:text-white">
                   Karir
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link href="/partners" className="hover:text-white">
                   Partner
                 </Link>
               </li>
@@ -79,22 +79,22 @@ export default function SaasFooter() {
             <h3 className="font-semibold text-lg mb-4">Bantuan</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link href="/help" className="hover:text-white">
                   Pusat Bantuan
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link href="/docs" className="hover:text-white">
                   Dokumentasi
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="hover:text-white">
+                <Link href="/contact" className="hover:text-white">
                   Kontak
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white">
+                <Link href="/status" className="hover:text-white">
                   Status Server
                 </Link>
               </li>
@@ -105,11 +105,11 @@ export default function SaasFooter() {
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
           <p>&copy; 2024 Pondok Digital. All rights reserved.</p>
           <div className="mt-2 space-x-4">
-            <Link href="#" className="hover:text-white">
-              Privacy Policy
+            <Link href="/privacy" className="hover:text-white">
+              Kebijakan Privasi
             </Link>
-            <Link href="#" className="hover:text-white">
-              Terms of Service
+            <Link href="/terms" className="hover:text-white">
+              Syarat Layanan
             </Link>
           </div>
         </div>
