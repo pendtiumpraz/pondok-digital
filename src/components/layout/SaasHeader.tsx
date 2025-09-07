@@ -84,7 +84,7 @@ export default function SaasHeader() {
               <Link href="/auth/admin-signin">{currentLang.loginAdmin}</Link>
             </Button>
             <Button asChild>
-              <Link href="/auth/register-yayasan">{currentLang.registerYayasan}</Link>
+              <Link href="/onboarding">{currentLang.registerYayasan}</Link>
             </Button>
           </div>
 
@@ -130,7 +130,7 @@ export default function SaasHeader() {
                 <Link href="/auth/admin-signin">{currentLang.loginAdmin}</Link>
               </Button>
               <Button asChild className="w-full">
-                <Link href="/auth/register-yayasan">{currentLang.registerYayasan}</Link>
+                <Link href="/onboarding">{currentLang.registerYayasan}</Link>
               </Button>
             </div>
           </nav>

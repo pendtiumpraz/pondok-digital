@@ -290,8 +290,8 @@ export default function FeaturesPage() {
               operasional hingga 80% dengan Pondok Digital
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100">
-                <Link href="/auth/register-yayasan">
+              <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100" asChild>
+                <Link href="/onboarding">
                   Mulai Gratis Sekarang
                 </Link>
               </Button>
