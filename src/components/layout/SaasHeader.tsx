@@ -3,18 +3,45 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Globe } from 'lucide-react'
 
 export default function SaasHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [language, setLanguage] = useState<'id' | 'en'>('id')
 
-  const menuItems = [
-    { label: 'Beranda', href: '/' },
-    { label: 'Fitur', href: '#features' },
-    { label: 'Harga', href: '/pricing' },
-    { label: 'Demo', href: '/yayasan/imam-syafii', target: '_blank' },
-    { label: 'Kontak', href: '#contact' },
-  ]
+  const translations = {
+    id: {
+      menu: [
+        { label: 'Beranda', href: '/' },
+        { label: 'Fitur', href: '#features' },
+        { label: 'Harga', href: '/pricing' },
+        { label: 'Demo', href: '/yayasan/imam-syafii', target: '_blank' },
+        { label: 'Kontak', href: '#contact' },
+      ],
+      loginAdmin: 'Masuk Admin',
+      registerYayasan: 'Daftar Yayasan',
+      languageLabel: 'EN'
+    },
+    en: {
+      menu: [
+        { label: 'Home', href: '/' },
+        { label: 'Features', href: '#features' },
+        { label: 'Pricing', href: '/pricing' },
+        { label: 'Demo', href: '/yayasan/imam-syafii', target: '_blank' },
+        { label: 'Contact', href: '#contact' },
+      ],
+      loginAdmin: 'Admin Login',
+      registerYayasan: 'Register Foundation',
+      languageLabel: 'ID'
+    }
+  }
+
+  const currentLang = translations[language]
+  const menuItems = currentLang.menu
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'id' ? 'en' : 'id')
+  }
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -43,13 +70,21 @@ export default function SaasHeader() {
             ))}
           </nav>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons and Language Toggle */}
           <div className="hidden md:flex items-center space-x-4">
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center space-x-1 px-3 py-2 text-gray-600 hover:text-green-600 transition-colors"
+              title={language === 'id' ? 'Switch to English' : 'Ganti ke Bahasa Indonesia'}
+            >
+              <Globe className="w-4 h-4" />
+              <span className="text-sm font-medium">{currentLang.languageLabel}</span>
+            </button>
             <Button variant="outline" asChild>
-              <Link href="/auth/admin-signin">Login Admin</Link>
+              <Link href="/auth/admin-signin">{currentLang.loginAdmin}</Link>
             </Button>
             <Button asChild>
-              <Link href="/auth/register-yayasan">Daftar Yayasan</Link>
+              <Link href="/auth/register-yayasan">{currentLang.registerYayasan}</Link>
             </Button>
           </div>
 
@@ -82,11 +117,20 @@ export default function SaasHeader() {
               </Link>
             ))}
             <div className="pt-4 border-t mt-4 space-y-2">
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center justify-center space-x-2 w-full py-2 text-gray-600 hover:text-green-600"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="text-sm font-medium">
+                  {language === 'id' ? 'English' : 'Bahasa Indonesia'}
+                </span>
+              </button>
               <Button variant="outline" asChild className="w-full">
-                <Link href="/auth/admin-signin">Login Admin</Link>
+                <Link href="/auth/admin-signin">{currentLang.loginAdmin}</Link>
               </Button>
               <Button asChild className="w-full">
-                <Link href="/auth/register-yayasan">Daftar Yayasan</Link>
+                <Link href="/auth/register-yayasan">{currentLang.registerYayasan}</Link>
               </Button>
             </div>
           </nav>
