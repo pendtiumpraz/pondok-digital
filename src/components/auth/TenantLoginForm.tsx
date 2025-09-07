@@ -275,7 +275,7 @@ export default function TenantLoginForm({ redirectTo, className }: TenantLoginFo
           )}
         </div>
         
-        {loginMethod === 'username' && showPrefixHint && (
+        {loginMethod === 'username' && showPrefixHint && tenant && (
           <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">
             Your username format: <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">
               {tenant.prefix}_your_username
