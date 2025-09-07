@@ -7,17 +7,36 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Starting database seed...');
 
-  // Create admin user
+  // Create SUPERADMIN user (Platform Owner)
+  const superAdminPassword = await bcrypt.hash('superadmin123', 10);
+  
+  const superAdmin = await prisma.user.upsert({
+    where: { username: 'superadmin' },
+    update: {},
+    create: {
+      username: 'superadmin',
+      email: 'superadmin@sistempondok.id',
+      password: superAdminPassword,
+      name: 'Super Administrator',
+      role: 'SUPERADMIN',
+      isUstadz: false,
+      isActive: true,
+    },
+  });
+
+  console.log('Created SUPERADMIN user:', superAdmin.username);
+
+  // Create admin user (Admin Yayasan Imam Syafii)
   const hashedPassword = await bcrypt.hash('admin123', 10);
   
   const admin = await prisma.user.upsert({
     where: { username: 'admin' },
     update: {},
     create: {
-      username: 'admin',
+      username: 'admin_syafii',
       email: 'admin@pondokimamsyafii.com',
       password: hashedPassword,
-      name: 'Administrator',
+      name: 'Admin Yayasan Imam Syafii',
       role: 'ADMIN',
       isUstadz: false,
       isActive: true,

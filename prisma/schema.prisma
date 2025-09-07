@@ -23,6 +23,7 @@ model User {
   twoFactorSecret           String?
   backupCodes               String[]               @default([])
   phoneVerified             Boolean                @default(false)
+  tenantId                  String?
   createdActivities         Activity[]
   createdAlumni             Alumni[]
   answeredQuestions         Answer[]               @relation("UstadzAnswers")
@@ -55,8 +56,25 @@ model User {
   createdTransactions       Transaction[]
   twoFactorVerification     TwoFactorVerification?
   createdVideos             Video[]
+  tenant                    Tenant?                @relation(fields: [tenantId], references: [id])
 
   @@map("users")
+}
+
+model Tenant {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  prefix      String    @unique
+  domain      String?   @unique
+  subdomain   String?   @unique
+  isActive    Boolean   @default(true)
+  settings    Json?     @default("{}")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  users       User[]
+
+  @@map("tenants")
 }
 
 model PushSubscription {
@@ -2526,4 +2544,451 @@ model Answer {
   @@index([ustadzId])
   @@index([createdAt])
   @@map("answers")
+}
+
+// ==================== CMS MODELS ====================
+
+model PublicPageConfig {
+  id         String @id @default(cuid())
+  tenantId   String @unique
+  tenantName String
+  tenantSlug String @unique
+
+  // General Settings
+  siteName        String  @default("Pondok Imam Syafii")
+  siteDescription String?
+  siteKeywords    String  @default("[]")
+  logoUrl         String?
+  faviconUrl      String?
+  contactEmail    String?
+  contactPhone    String?
+  contactAddress  String?
+  socialMedia     String  @default("{}")
+
+  // Feature Toggles
+  enableHeroSection       Boolean @default(true)
+  enableAboutSection      Boolean @default(true)
+  enableProgramsSection   Boolean @default(true)
+  enableGallerySection    Boolean @default(true)
+  enableNewsSection       Boolean @default(true)
+  enableTestimonials      Boolean @default(true)
+  enableContactSection    Boolean @default(true)
+  enableFacilities        Boolean @default(true)
+  enableStatistics        Boolean @default(true)
+  enableTeachersSection   Boolean @default(true)
+  enableActivitiesSection Boolean @default(true)
+
+  // SEO Settings
+  metaTitle            String?
+  metaDescription      String?
+  metaKeywords         String  @default("[]")
+  openGraphTitle       String?
+  openGraphDescription String?
+  openGraphImage       String?
+  twitterCard          String?
+  canonicalUrl         String?
+  robotsConfig         String  @default("index, follow")
+  structuredData       String  @default("{}")
+
+  // Custom CSS/JS
+  customCSS         String?
+  customJS          String?
+  headerScripts     String?
+  footerScripts     String?
+  googleAnalyticsId String?
+  facebookPixelId   String?
+
+  // Layout Settings
+  layoutStyle       String  @default("DEFAULT")
+  headerStyle       String  @default("DEFAULT")
+  footerStyle       String  @default("DEFAULT")
+  navbarTransparent Boolean @default(false)
+  stickyNavbar      Boolean @default(true)
+  showBreadcrumbs   Boolean @default(true)
+
+  // Status
+  isPublished        Boolean   @default(false)
+  publishedAt        DateTime?
+  lastPublishedBy    String?
+  isMaintenanceMode  Boolean   @default(false)
+  maintenanceMessage String?
+
+  // Theme Configuration
+  themePresetId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  themePreset   ThemePreset?   @relation("PageTheme", fields: [themePresetId], references: [id])
+  contentBlocks ContentBlock[]
+  navigations   Navigation[]
+  galleries     Gallery[]
+  sliders       Slider[]
+
+  @@index([tenantSlug])
+  @@index([isPublished])
+  @@index([updatedAt])
+  @@map("public_page_configs")
+}
+
+model ThemePreset {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  // Color Scheme
+  primaryColor    String @default("#10b981")
+  secondaryColor  String @default("#3b82f6")
+  accentColor     String @default("#f59e0b")
+  backgroundLight String @default("#ffffff")
+  backgroundDark  String @default("#f8fafc")
+  textPrimary     String @default("#1f2937")
+  textSecondary   String @default("#6b7280")
+  textMuted       String @default("#9ca3af")
+
+  // Gradient Settings
+  enableGradients     Boolean @default(true)
+  heroGradientStart   String  @default("#10b981")
+  heroGradientEnd     String  @default("#3b82f6")
+  cardGradientStart   String?
+  cardGradientEnd     String?
+  buttonGradientStart String?
+  buttonGradientEnd   String?
+  gradientDirection   String  @default("to bottom right")
+  gradientOpacity     Decimal @default(0.9)
+
+  // Typography
+  fontFamily    String  @default("Inter")
+  headingFont   String?
+  bodyFont      String?
+  fontSize      String  @default("16")
+  headingWeight String  @default("600")
+  bodyWeight    String  @default("400")
+  lineHeight    String  @default("1.6")
+
+  // Spacing & Layout
+  containerMaxWidth String @default("1200px")
+  sectionPadding    String @default("4rem")
+  cardRadius        String @default("0.75rem")
+  buttonRadius      String @default("0.5rem")
+  borderWidth       String @default("1px")
+
+  // Shadow & Effects
+  shadowLight  String @default("0 1px 3px rgba(0,0,0,0.1)")
+  shadowMedium String @default("0 4px 6px rgba(0,0,0,0.1)")
+  shadowHeavy  String @default("0 10px 25px rgba(0,0,0,0.15)")
+  blurRadius   String @default("8px")
+
+  // Animation Settings
+  enableAnimations  Boolean @default(true)
+  animationDuration String  @default("0.3s")
+  animationEasing   String  @default("ease-out")
+  hoverTransform    String  @default("translateY(-2px)")
+
+  // Component Styles
+  navbarBackground String?
+  navbarTextColor  String?
+  footerBackground String?
+  footerTextColor  String?
+  cardBackground   String?
+  cardTextColor    String?
+
+  // Status
+  isActive  Boolean @default(true)
+  isDefault Boolean @default(false)
+  version   String  @default("1.0")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  pageConfigs PublicPageConfig[] @relation("PageTheme")
+
+  @@index([isActive, isDefault])
+  @@map("theme_presets")
+}
+
+model ContentBlock {
+  id           String @id @default(cuid())
+  pageConfigId String
+
+  // Block Identification
+  sectionType String // hero, about, programs, gallery, news, etc.
+  blockKey    String // unique key for the block
+  blockName   String // display name
+
+  // Content Data
+  title    String?
+  subtitle String?
+  content  String? // Rich text content
+  imageUrl String?
+  imageAlt String?
+  videoUrl String?
+  linkUrl  String?
+  linkText String?
+  ctaText  String?
+  ctaUrl   String?
+
+  // Advanced Content
+  richContent String? // JSON for complex content structures
+  metadata    String  @default("{}")
+  customData  String  @default("{}")
+
+  // Layout & Style
+  layout          String  @default("default")
+  alignment       String  @default("left")
+  backgroundColor String?
+  textColor       String?
+  overlayColor    String?
+  overlayOpacity  Decimal @default(0.5)
+
+  // Display Settings
+  isVisible    Boolean @default(true)
+  sortOrder    Int     @default(0)
+  showTitle    Boolean @default(true)
+  showSubtitle Boolean @default(true)
+  showImage    Boolean @default(true)
+  showButton   Boolean @default(true)
+
+  // Responsive Settings
+  hideOnMobile  Boolean @default(false)
+  hideOnTablet  Boolean @default(false)
+  hideOnDesktop Boolean @default(false)
+
+  // SEO
+  seoTitle       String?
+  seoDescription String?
+
+  // Status
+  status      String    @default("published")
+  publishedAt DateTime?
+  scheduledAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  pageConfig PublicPageConfig @relation(fields: [pageConfigId], references: [id], onDelete: Cascade)
+
+  @@unique([pageConfigId, blockKey])
+  @@index([pageConfigId, sectionType])
+  @@index([sectionType, isVisible])
+  @@index([sortOrder])
+  @@index([status, publishedAt])
+  @@map("content_blocks")
+}
+
+model Navigation {
+  id           String @id @default(cuid())
+  pageConfigId String
+
+  // Navigation Details
+  label       String
+  url         String
+  icon        String?
+  description String?
+
+  // Hierarchy
+  parentId  String?
+  level     Int     @default(0)
+  sortOrder Int     @default(0)
+
+  // Display Settings
+  isVisible      Boolean @default(true)
+  openInNewTab   Boolean @default(false)
+  isHighlighted  Boolean @default(false)
+  highlightColor String?
+
+  // Menu Type
+  menuType String @default("header") // header, footer, mobile, sidebar
+
+  // Access Control
+  requireAuth  Boolean @default(false)
+  allowedRoles String  @default("[]")
+
+  // Style
+  customCSS String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  pageConfig PublicPageConfig @relation(fields: [pageConfigId], references: [id], onDelete: Cascade)
+  parent     Navigation?      @relation("NavigationHierarchy", fields: [parentId], references: [id])
+  children   Navigation[]     @relation("NavigationHierarchy")
+
+  @@index([pageConfigId, menuType])
+  @@index([parentId, sortOrder])
+  @@index([isVisible, menuType])
+  @@map("navigations")
+}
+
+model Gallery {
+  id           String @id @default(cuid())
+  pageConfigId String
+
+  // Gallery Info
+  title       String
+  description String?
+  category    String  @default("general")
+  tags        String  @default("[]")
+
+  // Display Settings
+  isVisible  Boolean @default(true)
+  isFeatured Boolean @default(false)
+  sortOrder  Int     @default(0)
+
+  // Layout
+  layoutType       String  @default("grid") // grid, masonry, carousel
+  itemsPerRow      Int     @default(3)
+  showTitles       Boolean @default(true)
+  showDescriptions Boolean @default(false)
+  enableLightbox   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  pageConfig PublicPageConfig @relation(fields: [pageConfigId], references: [id], onDelete: Cascade)
+  items      GalleryItem[]
+
+  @@index([pageConfigId, category])
+  @@index([isVisible, isFeatured])
+  @@index([sortOrder])
+  @@map("galleries")
+}
+
+model GalleryItem {
+  id        String @id @default(cuid())
+  galleryId String
+
+  // Media Info
+  title        String
+  description  String?
+  imageUrl     String
+  thumbnailUrl String?
+  imageAlt     String?
+
+  // Media Type
+  mediaType   String  @default("image") // image, video
+  videoUrl    String?
+  videoPoster String?
+
+  // Metadata
+  fileName     String?
+  fileSize     Int?
+  dimensions   String? // "1920x1080"
+  capturedAt   DateTime?
+  location     String?
+  photographer String?
+
+  // Display
+  isVisible Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  // Tags & Categories
+  tags     String  @default("[]")
+  category String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  gallery Gallery @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+
+  @@index([galleryId, sortOrder])
+  @@index([isVisible])
+  @@index([mediaType])
+  @@index([category])
+  @@map("gallery_items")
+}
+
+model Slider {
+  id           String @id @default(cuid())
+  pageConfigId String
+
+  // Slider Info
+  name        String
+  description String?
+  location    String  @default("hero") // hero, banner, sidebar
+
+  // Display Settings
+  isActive      Boolean @default(true)
+  autoPlay      Boolean @default(true)
+  autoPlayDelay Int     @default(5000)
+  showDots      Boolean @default(true)
+  showArrows    Boolean @default(true)
+  showCaptions  Boolean @default(true)
+  infiniteLoop  Boolean @default(true)
+
+  // Transition Effects
+  transitionType     String @default("fade") // fade, slide, zoom
+  transitionDuration Int    @default(500)
+
+  // Responsive Settings
+  itemsPerSlide       Int @default(1)
+  itemsPerSlideTablet Int @default(1)
+  itemsPerSlideMobile Int @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  pageConfig PublicPageConfig @relation(fields: [pageConfigId], references: [id], onDelete: Cascade)
+  items      SliderItem[]
+
+  @@index([pageConfigId, location])
+  @@index([isActive])
+  @@map("sliders")
+}
+
+model SliderItem {
+  id       String @id @default(cuid())
+  sliderId String
+
+  // Content
+  title          String
+  subtitle       String?
+  description    String?
+  imageUrl       String
+  mobileImageUrl String?
+
+  // Call to Action
+  ctaText          String?
+  ctaUrl           String?
+  ctaStyle         String  @default("primary")
+  secondaryCtaText String?
+  secondaryCtaUrl  String?
+
+  // Style & Layout
+  textPosition   String  @default("center") // left, center, right
+  textAlignment  String  @default("center")
+  overlayColor   String?
+  overlayOpacity Decimal @default(0.4)
+  textColor      String  @default("#ffffff")
+
+  // Display Settings
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  // Animation
+  animationIn       String @default("fadeIn")
+  animationOut      String @default("fadeOut")
+  animationDuration Int    @default(1000)
+
+  // Scheduling
+  publishedAt DateTime?
+  expiresAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  slider Slider @relation(fields: [sliderId], references: [id], onDelete: Cascade)
+
+  @@index([sliderId, sortOrder])
+  @@index([isActive])
+  @@index([publishedAt, expiresAt])
+  @@map("slider_items")
 }
