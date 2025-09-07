@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { MidtransSubscriptionGateway } from '@/lib/subscription/midtrans-subscription'
-import { PaymentNotification } from '@/lib/subscription/types'
+import { PaymentNotification } from '@/lib/payment-gateway'
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     const notification: PaymentNotification = {
       transaction_time: body.transaction_time,
-      transaction_status: body.transaction_status,
+      transaction_status: body.transaction_status as 'capture' | 'settlement' | 'pending' | 'deny' | 'cancel' | 'expire' | 'failure',
       transaction_id: body.transaction_id,
       status_message: body.status_message,
       status_code: body.status_code,
