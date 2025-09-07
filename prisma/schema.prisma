@@ -73,6 +73,11 @@ model Tenant {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   users       User[]
+  
+  // SAAS Relations
+  subscription         Subscription?
+  invoices            Invoice[]
+  paymentTransactions PaymentTransaction[]
 
   @@map("tenants")
 }
@@ -2991,4 +2996,103 @@ model SliderItem {
   @@index([isActive])
   @@index([publishedAt, expiresAt])
   @@map("slider_items")
+}
+
+// ==================== SAAS Models ====================
+
+model Subscription {
+  id                   String               @id @default(cuid())
+  organizationId       String               @unique
+  tier                 String               // TRIAL, BASIC, STANDARD, PREMIUM, ENTERPRISE
+  status               String               // ACTIVE, CANCELLED, EXPIRED, SUSPENDED, TRIAL, GRACE_PERIOD
+  startDate            DateTime
+  endDate              DateTime
+  trialEndDate         DateTime?
+  isTrialUsed          Boolean              @default(false)
+  gracePeriodEndDate   DateTime?
+  autoRenew            Boolean              @default(false)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  billingCycle         String               // MONTHLY, YEARLY
+  price                Float
+  currency             String               @default("IDR")
+  lastPaymentDate      DateTime?
+  nextBillingDate      DateTime?
+  paymentMethod        String?
+  discountPercent      Float?
+  discountEndDate      DateTime?
+  cancelledAt          DateTime?
+  cancelReason         String?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  
+  invoices             Invoice[]
+  transactions         PaymentTransaction[]
+  tenant               Tenant               @relation(fields: [organizationId], references: [id])
+  
+  @@index([organizationId])
+  @@index([status])
+  @@index([endDate])
+  @@map("subscriptions")
+}
+
+model Invoice {
+  id                   String               @id @default(cuid())
+  invoiceNumber        String               @unique
+  subscriptionId       String
+  organizationId       String
+  amount               Float
+  currency             String               @default("IDR")
+  status               String               // PENDING, PAID, FAILED, CANCELLED, REFUNDED
+  dueDate              DateTime
+  paidDate             DateTime?
+  subtotal             Float
+  tax                  Float                @default(0)
+  discount             Float                @default(0)
+  total                Float
+  paymentMethod        String?
+  transactionId        String?
+  notes                String?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  
+  subscription         Subscription         @relation(fields: [subscriptionId], references: [id])
+  tenant               Tenant               @relation(fields: [organizationId], references: [id])
+  transactions         PaymentTransaction[]
+  
+  @@index([subscriptionId])
+  @@index([organizationId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("invoices")
+}
+
+model PaymentTransaction {
+  id                   String               @id @default(cuid())
+  invoiceId            String
+  subscriptionId       String
+  organizationId       String
+  amount               Float
+  currency             String               @default("IDR")
+  status               String               // PENDING, SUCCESS, FAILED, CANCELLED, REFUNDED
+  paymentMethod        String
+  paymentGateway       String               @default("MIDTRANS")
+  gatewayTransactionId String?
+  gatewayResponse      Json?
+  paidAt               DateTime?
+  failureReason        String?
+  refundedAt           DateTime?
+  refundAmount         Float?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  
+  invoice              Invoice              @relation(fields: [invoiceId], references: [id])
+  subscription         Subscription         @relation(fields: [subscriptionId], references: [id])
+  tenant               Tenant               @relation(fields: [organizationId], references: [id])
+  
+  @@index([invoiceId])
+  @@index([subscriptionId])
+  @@index([organizationId])
+  @@index([gatewayTransactionId])
+  @@map("payment_transactions")
 }

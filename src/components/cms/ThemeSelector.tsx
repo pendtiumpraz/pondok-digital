@@ -420,8 +420,8 @@ const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
                   <Label>Border Radius</Label>
                   <Select
                     value={customTheme.borderRadius}
-                    onValueChange={(value: Theme['borderRadius']) =>
-                      setCustomTheme(prev => ({ ...prev, borderRadius: value }))
+                    onValueChange={(value) =>
+                      setCustomTheme(prev => ({ ...prev, borderRadius: value as Theme['borderRadius'] }))
                     }
                   >
                     <SelectTrigger>
@@ -441,8 +441,8 @@ const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
                   <Label>Shadows</Label>
                   <Select
                     value={customTheme.shadows}
-                    onValueChange={(value: Theme['shadows']) =>
-                      setCustomTheme(prev => ({ ...prev, shadows: value }))
+                    onValueChange={(value) =>
+                      setCustomTheme(prev => ({ ...prev, shadows: value as Theme['shadows'] }))
                     }
                   >
                     <SelectTrigger>

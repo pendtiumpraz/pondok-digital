@@ -172,6 +172,17 @@ export interface InvoiceItem {
   }
 }
 
+export interface CreateInvoiceParams {
+  subscriptionId: string
+  organizationId: string
+  amount: number
+  description: string
+  items?: InvoiceItem[]
+  dueDate?: Date
+  discountPercent?: number
+  notes?: string
+}
+
 export interface PaymentTransaction {
   id: string
   invoiceId: string

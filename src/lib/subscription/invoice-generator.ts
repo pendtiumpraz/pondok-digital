@@ -4,21 +4,12 @@ import {
   InvoiceItem, 
   PaymentStatus, 
   SubscriptionTier,
-  PaymentTransaction
+  PaymentTransaction,
+  CreateInvoiceParams
 } from './types'
 import { PricingService } from './pricing'
 import jsPDF from 'jspdf'
 
-export interface CreateInvoiceParams {
-  subscriptionId: string
-  organizationId: string
-  amount: number
-  description: string
-  dueDate?: Date
-  items?: InvoiceItem[]
-  discountPercent?: number
-  notes?: string
-}
 
 export interface InvoiceTemplate {
   companyName: string
@@ -66,7 +57,7 @@ export class InvoiceGenerator {
     }]
 
     try {
-      const invoice = await prisma.invoice?.create({
+      const invoice = await prisma.invoice.create({
         data: {
           subscriptionId: params.subscriptionId,
           organizationId: params.organizationId,
@@ -75,12 +66,11 @@ export class InvoiceGenerator {
           currency: 'IDR',
           status: PaymentStatus.PENDING,
           dueDate,
-          items,
           subtotal,
           tax,
           discount,
           total,
-          notes: params.notes
+          notes: params.notes ? params.notes : (items ? JSON.stringify(items) : null)
         }
       })
 
@@ -102,11 +92,11 @@ export class InvoiceGenerator {
    * Generate invoice PDF
    */
   static async generateInvoicePDF(invoiceId: string): Promise<Buffer> {
-    const invoice = await prisma.invoice?.findUnique({
+    const invoice = await prisma.invoice.findUnique({
       where: { id: invoiceId },
       include: {
         subscription: true,
-        organization: true
+        tenant: true
       }
     })
 
@@ -163,15 +153,18 @@ export class InvoiceGenerator {
     pdf.text('TAGIHAN UNTUK:', 20, 80)
 
     pdf.setFontSize(10)
-    pdf.text(invoice.organization?.name || 'Unknown Organization', 20, 90)
-    if (invoice.organization?.address) {
-      pdf.text(invoice.organization.address, 20, 95)
+    pdf.text(invoice.tenant?.name || 'Unknown Organization', 20, 90)
+    
+    // Get contact info from settings if available
+    const settings = (invoice.tenant?.settings as any) || {}
+    if (settings.address) {
+      pdf.text(settings.address, 20, 95)
     }
-    if (invoice.organization?.phone) {
-      pdf.text(`Tel: ${invoice.organization.phone}`, 20, 100)
+    if (settings.phone) {
+      pdf.text(`Tel: ${settings.phone}`, 20, 100)
     }
-    if (invoice.organization?.email) {
-      pdf.text(`Email: ${invoice.organization.email}`, 20, 105)
+    if (settings.email) {
+      pdf.text(`Email: ${settings.email}`, 20, 105)
     }
 
     // Invoice items table
@@ -192,8 +185,8 @@ export class InvoiceGenerator {
     let currentY = tableStartY + 8
     pdf.setTextColor(51, 51, 51)
     
-    const items = invoice.items as InvoiceItem[]
-    items.forEach((item, index) => {
+    const items = invoice.notes ? (typeof invoice.notes === 'string' ? JSON.parse(invoice.notes) : []) : []
+    items.forEach((item: any, index: number) => {
       const rowY = currentY + (index * 8) + 5
       
       // Alternate row colors
@@ -265,7 +258,7 @@ export class InvoiceGenerator {
    */
   static async markInvoicePaid(invoiceId: string, paymentTransactionId?: string): Promise<void> {
     try {
-      await prisma.invoice?.update({
+      await prisma.invoice.update({
         where: { id: invoiceId },
         data: {
           status: PaymentStatus.SUCCESS,
@@ -285,7 +278,7 @@ export class InvoiceGenerator {
    */
   static async markInvoiceFailed(invoiceId: string, reason?: string): Promise<void> {
     try {
-      await prisma.invoice?.update({
+      await prisma.invoice.update({
         where: { id: invoiceId },
         data: {
           status: PaymentStatus.FAILED,
@@ -303,11 +296,11 @@ export class InvoiceGenerator {
    * Get invoice by ID
    */
   static async getInvoice(invoiceId: string): Promise<any> {
-    return await prisma.invoice?.findUnique({
+    return await prisma.invoice.findUnique({
       where: { id: invoiceId },
       include: {
         subscription: true,
-        organization: true
+        tenant: true
       }
     })
   }
@@ -338,7 +331,7 @@ export class InvoiceGenerator {
     }
 
     const [invoices, total] = await Promise.all([
-      prisma.invoice?.findMany({
+      prisma.invoice.findMany({
         where,
         include: {
           subscription: true
@@ -347,7 +340,7 @@ export class InvoiceGenerator {
         take: options.limit || 20,
         skip: options.offset || 0
       }),
-      prisma.invoice?.count({ where })
+      prisma.invoice.count({ where })
     ])
 
     return {
@@ -362,14 +355,14 @@ export class InvoiceGenerator {
   static async getOverdueInvoices(): Promise<any[]> {
     const today = new Date()
     
-    return await prisma.invoice?.findMany({
+    return await prisma.invoice.findMany({
       where: {
         status: PaymentStatus.PENDING,
         dueDate: { lt: today }
       },
       include: {
         subscription: true,
-        organization: true
+        tenant: true
       }
     }) || []
   }
@@ -388,7 +381,7 @@ export class InvoiceGenerator {
       // Send notification to organization admins
       const admins = await prisma.user.findMany({
         where: {
-          tenantId: invoice.organizationId,
+          tenantId: invoice.tenantId,
           role: 'ADMIN',
           isActive: true
         }
@@ -406,14 +399,14 @@ export class InvoiceGenerator {
               ? `Invoice ${invoice.invoiceNumber} telah jatuh tempo ${daysOverdue} hari yang lalu. Total: ${PricingService.formatPrice(invoice.total)}`
               : `Invoice ${invoice.invoiceNumber} akan jatuh tempo pada ${invoice.dueDate.toLocaleDateString('id-ID')}. Total: ${PricingService.formatPrice(invoice.total)}`,
             type: 'BILLING_ALERT',
-            data: {
+            data: JSON.stringify({
               invoiceId,
               invoiceNumber: invoice.invoiceNumber,
               amount: invoice.total,
               dueDate: invoice.dueDate,
               isOverdue,
               daysOverdue
-            }
+            })
           }
         })
       }
@@ -437,12 +430,12 @@ export class InvoiceGenerator {
         const daysOverdue = Math.ceil((new Date().getTime() - invoice.dueDate.getTime()) / (1000 * 60 * 60 * 24))
         
         if (daysOverdue >= 30) { // Suspend after 30 days overdue
-          const subscription = await prisma.subscription?.findUnique({
+          const subscription = await prisma.subscription.findUnique({
             where: { id: invoice.subscriptionId }
           })
           
           if (subscription && subscription.status !== 'SUSPENDED') {
-            await prisma.subscription?.update({
+            await prisma.subscription.update({
               where: { id: subscription.id },
               data: {
                 status: 'SUSPENDED',

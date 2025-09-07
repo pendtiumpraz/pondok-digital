@@ -131,7 +131,7 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
       // For Midtrans, we'll use saved card tokens for recurring payments
       // This is a placeholder implementation
       
-      const subscription = await prisma.subscription?.findUnique({
+      const subscription = await prisma.subscription.findUnique({
         where: { id: setup.subscriptionId }
       })
 
@@ -140,7 +140,7 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
       }
 
       // Update subscription with recurring payment info
-      await prisma.subscription?.update({
+      await prisma.subscription.update({
         where: { id: setup.subscriptionId },
         data: {
           autoRenew: setup.enableAutoRenewal,
@@ -169,9 +169,9 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
     error?: string
   }> {
     try {
-      const subscription = await prisma.subscription?.findUnique({
+      const subscription = await prisma.subscription.findUnique({
         where: { id: subscriptionId },
-        include: { organization: true }
+        include: { tenant: true }
       })
 
       if (!subscription) {
@@ -200,9 +200,9 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
         billingCycle: subscription.billingCycle as any,
         amount: subscription.price,
         customerDetails: {
-          firstName: subscription.organization?.name || 'Organization',
-          email: subscription.organization?.email || '',
-          phone: subscription.organization?.phone || ''
+          firstName: subscription.tenant?.name || 'Organization',
+          email: (subscription.tenant?.settings as any)?.email || 'admin@pondok.id',
+          phone: (subscription.tenant?.settings as any)?.phone || '0812345678'
         },
         itemDetails: [{
           id: 'renewal',
@@ -240,7 +240,7 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
       }
 
       // Get payment transaction
-      const transaction = await prisma.paymentTransaction?.findFirst({
+      const transaction = await prisma.paymentTransaction.findFirst({
         where: { gatewayTransactionId: notification.transaction_id },
         include: {
           invoice: true,
@@ -273,13 +273,13 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
           transactionStatus = PaymentStatus.PENDING
       }
 
-      await prisma.paymentTransaction?.update({
+      await prisma.paymentTransaction.update({
         where: { id: transaction.id },
         data: {
           status: transactionStatus,
           paidAt: transactionStatus === PaymentStatus.SUCCESS ? new Date(notification.transaction_time) : null,
           failureReason: transactionStatus === PaymentStatus.FAILED ? notification.status_message : null,
-          gatewayResponse: notification,
+          gatewayResponse: notification as any,
           updatedAt: new Date()
         }
       })
@@ -306,7 +306,7 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
           // This would typically involve updating the subscription tier
         } else {
           // New subscription activation
-          await prisma.subscription?.update({
+          await prisma.subscription.update({
             where: { id: transaction.subscriptionId },
             data: {
               status: 'ACTIVE',
@@ -322,7 +322,7 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
         success: transactionStatus === PaymentStatus.SUCCESS,
         amount: transaction.amount,
         invoiceNumber: transaction.invoice?.invoiceNumber || notification.order_id,
-        subscriptionTier: transaction.subscription?.tier,
+        subscriptionTier: transaction.subscription?.tier as SubscriptionTier | undefined,
         transactionId: transaction.id
       })
 
@@ -341,12 +341,12 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
       await this.cancelPayment(orderId)
 
       // Update transaction status
-      const transaction = await prisma.paymentTransaction?.findFirst({
+      const transaction = await prisma.paymentTransaction.findFirst({
         where: { gatewayTransactionId: orderId }
       })
 
       if (transaction) {
-        await prisma.paymentTransaction?.update({
+        await prisma.paymentTransaction.update({
           where: { id: transaction.id },
           data: {
             status: PaymentStatus.CANCELLED,
@@ -379,7 +379,7 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-    const transactions = await prisma.paymentTransaction?.findMany({
+    const transactions = await prisma.paymentTransaction.findMany({
       where: {
         organizationId,
         createdAt: { gte: thirtyDaysAgo }
@@ -397,16 +397,16 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
       }
     }
 
-    const successfulTransactions = transactions.filter(t => t.status === PaymentStatus.SUCCESS)
-    const failedTransactions = transactions.filter(t => t.status === PaymentStatus.FAILED)
+    const successfulTransactions = transactions.filter((t) => t.status === PaymentStatus.SUCCESS)
+    const failedTransactions = transactions.filter((t) => t.status === PaymentStatus.FAILED)
 
-    const totalRevenue = successfulTransactions.reduce((sum, t) => sum + t.amount, 0)
+    const totalRevenue = successfulTransactions.reduce((sum, t) => sum + Number(t.amount), 0)
     const averagePaymentAmount = successfulTransactions.length > 0 
       ? totalRevenue / successfulTransactions.length 
       : 0
 
     const paymentMethodBreakdown: Record<string, number> = {}
-    transactions.forEach(t => {
+    transactions.forEach((t) => {
       const method = t.paymentMethod || 'unknown'
       paymentMethodBreakdown[method] = (paymentMethodBreakdown[method] || 0) + 1
     })
@@ -434,7 +434,7 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
     gatewayResponse: any
     orderId: string
   }): Promise<PaymentTransaction> {
-    const transaction = await prisma.paymentTransaction?.create({
+    const transaction = await prisma.paymentTransaction.create({
       data: {
         invoiceId: data.invoiceId,
         subscriptionId: data.subscriptionId,
@@ -503,13 +503,13 @@ export class MidtransSubscriptionGateway extends PaymentGateway {
             title,
             message,
             type: 'BILLING_ALERT',
-            data: {
+            data: JSON.stringify({
               success: data.success,
               amount: data.amount,
               invoiceNumber: data.invoiceNumber,
               subscriptionTier: data.subscriptionTier,
               transactionId: data.transactionId
-            }
+            })
           }
         })
       }
