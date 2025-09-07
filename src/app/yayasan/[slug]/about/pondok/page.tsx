@@ -26,7 +26,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import PublicLayout from '@/components/layout/PublicLayout'
 
 interface Statistics {
   totalSantri: number
@@ -138,7 +137,7 @@ export default function PondokPage() {
   }
 
   return (
-    <PublicLayout>
+    <>
       {/* Header */}
       <div className="bg-gradient-to-r from-green-600 to-green-700 text-white">
         <div className="container mx-auto px-4 py-16">
@@ -486,6 +485,6 @@ export default function PondokPage() {
           </div>
         </div>
       </section>
-    </PublicLayout>
+    </>
   )
 }

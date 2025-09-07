@@ -21,7 +21,6 @@ import {
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import PublicLayout from '@/components/layout/PublicLayout'
 
 export default function YayasanPage() {
   const fadeInUp = {
@@ -62,7 +61,7 @@ export default function YayasanPage() {
   ]
 
   return (
-    <PublicLayout>
+    <>
       {/* Header */}
       <div className="bg-gradient-to-r from-green-600 to-green-700 text-white">
         <div className="container mx-auto px-4 py-16">
@@ -331,6 +330,6 @@ export default function YayasanPage() {
           </div>
         </div>
       </section>
-    </PublicLayout>
+    </>
   )
 }

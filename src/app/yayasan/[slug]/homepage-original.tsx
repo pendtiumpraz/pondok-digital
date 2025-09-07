@@ -1,10 +1,10 @@
 'use client';
 
-import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import CountUp from 'react-countup';
+import PublicLayout from '@/components/layout/PublicLayout';
 import {
   BookOpenIcon,
   AcademicCapIcon,
@@ -33,9 +33,7 @@ import {
   FlagIcon,
 } from '@heroicons/react/24/solid';
 
-export default function YayasanHomePage() {
-  const params = useParams();
-  const slug = params.slug as string;
+export default function HomePage() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -60,56 +58,56 @@ export default function YayasanHomePage() {
       title: 'Manajemen Keuangan',
       description: 'Transparansi pengelolaan dana pondok, donasi, dan laporan keuangan real-time',
       color: 'from-emerald-400 to-green-600',
-      href: `/yayasan/${slug}/(authenticated)/keuangan`,
+      href: '/keuangan',
     },
     {
       icon: CalendarIcon,
       title: 'Dokumentasi Kegiatan',
       description: 'Arsip digital seluruh kegiatan pondok, TK, dan SD dengan foto dan video',
       color: 'from-blue-400 to-indigo-600',
-      href: `/yayasan/${slug}/kegiatan`,
+      href: '/kegiatan',
     },
     {
       icon: AcademicCapIcon,
       title: 'Kurikulum Terpadu',
       description: 'Integrasi kurikulum pesantren dengan pendidikan formal TK dan SD',
       color: 'from-purple-400 to-pink-600',
-      href: `/yayasan/${slug}/(authenticated)/kurikulum`,
+      href: '/kurikulum',
     },
     {
       icon: VideoCameraIcon,
       title: 'Video Kajian',
       description: 'Koleksi video kajian ustadz untuk pembelajaran online dan offline',
       color: 'from-orange-400 to-red-600',
-      href: `/yayasan/${slug}/kajian`,
+      href: '/kajian',
     },
     {
       icon: UsersIcon,
       title: 'Manajemen Siswa',
       description: 'Data lengkap siswa TK, SD, dan santri pondok dengan informasi akademik',
       color: 'from-indigo-400 to-blue-600',
-      href: `/yayasan/${slug}/(authenticated)/siswa`,
+      href: '/siswa',
     },
     {
       icon: UserGroupIcon,
       title: 'Manajemen Alumni',
       description: 'Database alumni untuk networking dan undangan acara pondok',
       color: 'from-pink-400 to-rose-600',
-      href: `/yayasan/${slug}/(authenticated)/alumni`,
+      href: '/alumni',
     },
     {
       icon: BuildingLibraryIcon,
       title: 'Perpustakaan Digital',
       description: 'E-book dan kitab digital dengan fitur baca online dan download',
       color: 'from-yellow-400 to-amber-600',
-      href: `/yayasan/${slug}/library`,
+      href: '/perpustakaan',
     },
     {
       icon: ChartBarIcon,
       title: 'Laporan & Analitik',
       description: 'Dashboard analitik untuk monitoring perkembangan pondok',
       color: 'from-teal-400 to-cyan-600',
-      href: `/yayasan/${slug}/(authenticated)/dashboard`,
+      href: '/dashboard',
     },
   ];
 
@@ -173,7 +171,7 @@ export default function YayasanHomePage() {
   ];
 
   return (
-    <>
+    <PublicLayout>
       {/* Hero Section */}
       <motion.section
         initial="hidden"
@@ -246,7 +244,7 @@ export default function YayasanHomePage() {
                 variants={fadeInUp}
                 className="flex flex-wrap gap-4"
               >
-                <Link href={`/yayasan/${slug}/auth/signin`}>
+                <Link href="/auth/signin">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -666,7 +664,7 @@ export default function YayasanHomePage() {
               </p>
               
               <div className="flex flex-wrap gap-4 justify-center">
-                <Link href={`/yayasan/${slug}/ppdb`}>
+                <Link href="/ppdb">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -676,7 +674,7 @@ export default function YayasanHomePage() {
                     Daftar PPDB
                   </motion.button>
                 </Link>
-                <Link href={`/yayasan/${slug}/donasi`}>
+                <Link href="/donasi">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -692,6 +690,6 @@ export default function YayasanHomePage() {
         </div>
       </section>
 
-    </>
+    </PublicLayout>
   );
 }

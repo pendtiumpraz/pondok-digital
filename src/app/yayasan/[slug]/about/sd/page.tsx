@@ -28,7 +28,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import PublicLayout from '@/components/layout/PublicLayout'
 
 interface Statistics {
   totalStudents: number
@@ -129,7 +128,7 @@ export default function SDPage() {
   ]
 
   return (
-    <PublicLayout>
+    <>
       {/* Header */}
       <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -510,6 +509,6 @@ export default function SDPage() {
           </div>
         </div>
       </section>
-    </PublicLayout>
+    </>
   )
 }

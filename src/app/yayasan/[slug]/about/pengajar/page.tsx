@@ -29,7 +29,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
-import PublicLayout from '@/components/layout/PublicLayout'
 
 interface Teacher {
   id: string
@@ -305,7 +304,7 @@ export default function PengajarPage() {
   const ustadzahCount = teachers.filter(t => !t.isUstadz).length
 
   return (
-    <PublicLayout>
+    <>
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700 text-white py-20 overflow-hidden">
@@ -492,6 +491,6 @@ export default function PengajarPage() {
           )}
         </div>
       </section>
-    </PublicLayout>
+    </>
   )
 }

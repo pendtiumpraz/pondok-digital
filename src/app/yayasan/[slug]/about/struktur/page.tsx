@@ -21,7 +21,6 @@ import {
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import PublicLayout from '@/components/layout/PublicLayout'
 
 export default function StrukturOrganisasiPage() {
   const fadeInUp = {
@@ -116,7 +115,7 @@ export default function StrukturOrganisasiPage() {
   ]
 
   return (
-    <PublicLayout>
+    <>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-green-600 to-emerald-700 text-white py-20">
         <div className="absolute inset-0 bg-black/20" />
@@ -356,6 +355,6 @@ export default function StrukturOrganisasiPage() {
           </motion.div>
         </div>
       </section>
-    </PublicLayout>
+    </>
   )
 }
