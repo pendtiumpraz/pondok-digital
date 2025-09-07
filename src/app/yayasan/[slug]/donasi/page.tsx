@@ -14,7 +14,9 @@ import {
   UserGroupIcon,
   ShareIcon,
   ClockIcon,
-  DocumentDuplicateIcon
+  DocumentDuplicateIcon,
+  ChartBarIcon,
+  DocumentTextIcon
 } from '@heroicons/react/24/outline'
 import { 
   HeartIcon as HeartSolidIcon,
@@ -30,6 +32,7 @@ export default function DonasiPage({}: DonasiPageProps) {
   const [urgentCampaigns, setUrgentCampaigns] = useState<DonationCampaign[]>([])
   const [recentDonations, setRecentDonations] = useState<Donation[]>([])
   const [loading, setLoading] = useState(true)
+  const slug = typeof window !== 'undefined' ? window.location.pathname.split('/')[2] : ''
 
   useEffect(() => {
     fetchDonasiData()
@@ -133,6 +136,16 @@ export default function DonasiPage({}: DonasiPageProps) {
                 <Button size="lg" className="bg-white text-green-600 hover:bg-green-50 text-lg px-8">
                   <HeartSolidIcon className="w-5 h-5 mr-2" />
                   Donasi Sekarang
+                </Button>
+              </Link>
+              <Link href={`/yayasan/${slug}/donasi/laporan-keuangan`}>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white text-white hover:bg-white hover:text-green-600 text-lg px-8"
+                >
+                  <ChartBarIcon className="w-5 h-5 mr-2" />
+                  Laporan Keuangan
                 </Button>
               </Link>
               <Link href="#kalkulator-zakat">
@@ -386,6 +399,57 @@ export default function DonasiPage({}: DonasiPageProps) {
               Lihat Semua Campaign
             </Button>
           </Link>
+        </div>
+      </div>
+
+      {/* Financial Report Section */}
+      <div className="bg-gray-50 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <Card className="p-8 bg-gradient-to-r from-blue-50 to-green-50 border-blue-200">
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-blue-600 rounded-lg">
+                    <ChartBarIcon className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      Transparansi Keuangan 2025
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Lihat laporan lengkap keuangan yayasan, meliputi seluruh pemasukan donasi dan non-donasi, 
+                      pengeluaran, serta program-program yang sedang berjalan tahun ini.
+                    </p>
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span className="text-gray-700">Laporan Bulanan</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                        <span className="text-gray-700">Infografik Cashflow</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                        <span className="text-gray-700">Program Aktif</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <Link href={`/yayasan/${slug}/donasi/laporan-keuangan`}>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                      <DocumentTextIcon className="w-5 h-5 mr-2" />
+                      Lihat Laporan Lengkap
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-gray-500 text-center">
+                    Update otomatis dari database
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
 

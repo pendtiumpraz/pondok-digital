@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,7 +32,7 @@ interface OnboardingData {
   // Step 2: Admin User
   adminName: string;
   adminEmail: string;
-  adminPhone: string;
+  adminWhatsapp: string;
   
   // Step 3: Plan Selection
   plan: string;
@@ -42,16 +43,24 @@ interface OnboardingData {
   subdomain: string;
   primaryColor: string;
   logoUrl: string;
-  
-  // Step 5: Payment
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-  billingAddress: string;
+}
+
+interface ValidationErrors {
+  organizationName?: string;
+  organizationType?: string;
+  industry?: string;
+  size?: string;
+  adminName?: string;
+  adminEmail?: string;
+  adminWhatsapp?: string;
+  subdomain?: string;
 }
 
 const OnboardingPage = () => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<ValidationErrors>({});
   const [data, setData] = useState<OnboardingData>({
     organizationName: '',
     organizationType: '',
@@ -59,20 +68,16 @@ const OnboardingPage = () => {
     size: '',
     adminName: '',
     adminEmail: '',
-    adminPhone: '',
+    adminWhatsapp: '',
     plan: 'pro',
     billingCycle: 'monthly',
     addOns: [],
     subdomain: '',
     primaryColor: '#6366f1',
     logoUrl: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    billingAddress: '',
   });
 
-  const totalSteps = 6;
+  const totalSteps = 4;
 
   const plans = [
     {
@@ -135,10 +140,85 @@ const OnboardingPage = () => {
 
   const updateData = (field: keyof OnboardingData, value: string | string[]) => {
     setData(prev => ({ ...prev, [field]: value }));
+    // Clear validation error when field is updated
+    if (errors[field as keyof ValidationErrors]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateWhatsApp = (phone: string): boolean => {
+    // Indonesian phone number validation
+    // Should start with +62 or 08 and be 10-15 digits total
+    const cleanPhone = phone.replace(/[^\d+]/g, '');
+    const indonesianRegex = /^(\+62|62|08)[\d]{8,12}$/;
+    return indonesianRegex.test(cleanPhone);
+  };
+
+  const validateCurrentStep = (): boolean => {
+    const newErrors: ValidationErrors = {};
+    let isValid = true;
+
+    switch (currentStep) {
+      case 1:
+        if (!data.organizationName.trim()) {
+          newErrors.organizationName = 'Organization name is required';
+          isValid = false;
+        }
+        if (!data.organizationType) {
+          newErrors.organizationType = 'Organization type is required';
+          isValid = false;
+        }
+        if (!data.industry.trim()) {
+          newErrors.industry = 'Industry is required';
+          isValid = false;
+        }
+        if (!data.size) {
+          newErrors.size = 'Company size is required';
+          isValid = false;
+        }
+        break;
+      case 2:
+        if (!data.adminName.trim()) {
+          newErrors.adminName = 'Full name is required';
+          isValid = false;
+        }
+        if (!data.adminEmail.trim()) {
+          newErrors.adminEmail = 'Email address is required';
+          isValid = false;
+        } else if (!validateEmail(data.adminEmail)) {
+          newErrors.adminEmail = 'Please enter a valid email address';
+          isValid = false;
+        }
+        if (!data.adminWhatsapp.trim()) {
+          newErrors.adminWhatsapp = 'WhatsApp number is required';
+          isValid = false;
+        } else if (!validateWhatsApp(data.adminWhatsapp)) {
+          newErrors.adminWhatsapp = 'Please enter a valid Indonesian WhatsApp number (e.g., +6281234567890 or 081234567890)';
+          isValid = false;
+        }
+        break;
+      case 4:
+        if (!data.subdomain.trim()) {
+          newErrors.subdomain = 'Subdomain is required';
+          isValid = false;
+        } else if (!/^[a-z0-9-]+$/.test(data.subdomain)) {
+          newErrors.subdomain = 'Subdomain can only contain lowercase letters, numbers, and hyphens';
+          isValid = false;
+        }
+        break;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const nextStep = () => {
-    if (currentStep < totalSteps) {
+    if (validateCurrentStep() && currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -149,10 +229,43 @@ const OnboardingPage = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Handle final submission
-    console.log('Onboarding completed:', data);
-    // Redirect to dashboard or show success message
+  const handleSubmit = async () => {
+    if (!validateCurrentStep()) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch('/api/onboarding/create-trial', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create trial account');
+      }
+
+      const result = await response.json();
+      
+      // Redirect to tenant dashboard
+      if (result.tenantSlug) {
+        router.push(`/yayasan/${result.tenantSlug}/dashboard`);
+      } else {
+        // Fallback redirect if slug is not provided
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      console.error('Error creating trial:', error);
+      setErrors({ 
+        adminEmail: error instanceof Error ? error.message : 'Failed to create trial account. Please try again.' 
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const stepVariants = {
@@ -224,8 +337,11 @@ const OnboardingPage = () => {
                         placeholder="Enter your organization name"
                         value={data.organizationName}
                         onChange={(e) => updateData('organizationName', e.target.value)}
-                        className="mt-2 h-12"
+                        className={`mt-2 h-12 ${errors.organizationName ? 'border-red-500' : ''}`}
                       />
+                      {errors.organizationName && (
+                        <p className="text-red-500 text-sm mt-1">{errors.organizationName}</p>
+                      )}
                     </div>
 
                     <div>
@@ -238,6 +354,8 @@ const OnboardingPage = () => {
                             className={`p-3 text-sm rounded-lg border-2 transition-all ${
                               data.organizationType === type
                                 ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                                : errors.organizationType
+                                ? 'border-red-300 hover:border-red-400'
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                           >
@@ -245,6 +363,9 @@ const OnboardingPage = () => {
                           </button>
                         ))}
                       </div>
+                      {errors.organizationType && (
+                        <p className="text-red-500 text-sm mt-1">{errors.organizationType}</p>
+                      )}
                     </div>
 
                     <div>
@@ -253,8 +374,11 @@ const OnboardingPage = () => {
                         placeholder="e.g., Software Development"
                         value={data.industry}
                         onChange={(e) => updateData('industry', e.target.value)}
-                        className="mt-2 h-12"
+                        className={`mt-2 h-12 ${errors.industry ? 'border-red-500' : ''}`}
                       />
+                      {errors.industry && (
+                        <p className="text-red-500 text-sm mt-1">{errors.industry}</p>
+                      )}
                     </div>
 
                     <div>
@@ -267,6 +391,8 @@ const OnboardingPage = () => {
                             className={`w-full p-3 text-sm rounded-lg border-2 transition-all text-left ${
                               data.size === size
                                 ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                                : errors.size
+                                ? 'border-red-300 hover:border-red-400'
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                           >
@@ -274,6 +400,9 @@ const OnboardingPage = () => {
                           </button>
                         ))}
                       </div>
+                      {errors.size && (
+                        <p className="text-red-500 text-sm mt-1">{errors.size}</p>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -292,7 +421,12 @@ const OnboardingPage = () => {
                   <div className="text-center mb-8">
                     <UserIcon className="w-16 h-16 mx-auto text-indigo-600 mb-4" />
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">Create admin account</h2>
-                    <p className="text-gray-600">Set up the main administrator account</p>
+                    <p className="text-gray-600">Set up the main administrator account for your 14-day free trial</p>
+                    <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                      <p className="text-sm text-blue-800">
+                        <strong>Free 14-day trial included!</strong> Our sales team will contact you via WhatsApp to help with onboarding and setup.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="max-w-md mx-auto space-y-6">
@@ -303,8 +437,11 @@ const OnboardingPage = () => {
                         placeholder="Enter your full name"
                         value={data.adminName}
                         onChange={(e) => updateData('adminName', e.target.value)}
-                        className="mt-2 h-12"
+                        className={`mt-2 h-12 ${errors.adminName ? 'border-red-500' : ''}`}
                       />
+                      {errors.adminName && (
+                        <p className="text-red-500 text-sm mt-1">{errors.adminName}</p>
+                      )}
                     </div>
 
                     <div>
@@ -315,26 +452,38 @@ const OnboardingPage = () => {
                         placeholder="admin@yourcompany.com"
                         value={data.adminEmail}
                         onChange={(e) => updateData('adminEmail', e.target.value)}
-                        className="mt-2 h-12"
+                        className={`mt-2 h-12 ${errors.adminEmail ? 'border-red-500' : ''}`}
                       />
+                      {errors.adminEmail && (
+                        <p className="text-red-500 text-sm mt-1">{errors.adminEmail}</p>
+                      )}
                     </div>
 
                     <div>
-                      <Label htmlFor="adminPhone" className="text-base font-semibold">Phone Number</Label>
+                      <Label htmlFor="adminWhatsapp" className="text-base font-semibold">WhatsApp Number *</Label>
                       <Input
-                        id="adminPhone"
+                        id="adminWhatsapp"
                         type="tel"
-                        placeholder="+1 (555) 123-4567"
-                        value={data.adminPhone}
-                        onChange={(e) => updateData('adminPhone', e.target.value)}
-                        className="mt-2 h-12"
+                        placeholder="+6281234567890 or 081234567890"
+                        value={data.adminWhatsapp}
+                        onChange={(e) => updateData('adminWhatsapp', e.target.value)}
+                        className={`mt-2 h-12 ${errors.adminWhatsapp ? 'border-red-500' : ''}`}
                       />
+                      <p className="text-sm text-gray-500 mt-1">
+                        Indonesian WhatsApp number for onboarding support
+                      </p>
+                      {errors.adminWhatsapp && (
+                        <p className="text-red-500 text-sm mt-1">{errors.adminWhatsapp}</p>
+                      )}
                     </div>
 
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-sm text-blue-800">
-                        <strong>Note:</strong> This will be the primary administrator account. 
-                        You can add more team members later from your dashboard.
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <p className="text-sm text-green-800">
+                        <strong>What happens next?</strong><br/>
+                        1. Your 14-day free trial starts immediately<br/>
+                        2. Our sales team will WhatsApp you within 24 hours<br/>
+                        3. We'll help you set up and customize your system<br/>
+                        4. No payment required until trial ends
                       </p>
                     </div>
                   </div>
@@ -453,13 +602,16 @@ const OnboardingPage = () => {
                             id="subdomain"
                             placeholder="yourcompany"
                             value={data.subdomain}
-                            onChange={(e) => updateData('subdomain', e.target.value)}
-                            className="h-12 rounded-r-none"
+                            onChange={(e) => updateData('subdomain', e.target.value.toLowerCase())}
+                            className={`h-12 rounded-r-none ${errors.subdomain ? 'border-red-500' : ''}`}
                           />
                           <div className="bg-gray-100 border border-l-0 border-gray-300 px-4 flex items-center rounded-r-md text-gray-600">
-                            .yoursaas.com
+                            .pondokdigital.com
                           </div>
                         </div>
+                        {errors.subdomain && (
+                          <p className="text-red-500 text-sm mt-1">{errors.subdomain}</p>
+                        )}
                       </div>
 
                       <div>
@@ -515,7 +667,7 @@ const OnboardingPage = () => {
                           <div className="text-center">
                             <div className="text-sm text-gray-600 mb-2">Your custom URL:</div>
                             <div className="font-mono text-sm bg-gray-100 px-3 py-2 rounded">
-                              https://{data.subdomain || 'yourcompany'}.yoursaas.com
+                              https://{data.subdomain || 'yourcompany'}.pondokdigital.com
                             </div>
                           </div>
                         </div>
@@ -525,123 +677,11 @@ const OnboardingPage = () => {
                 </motion.div>
               )}
 
-              {/* Step 5: Payment */}
-              {currentStep === 5 && (
+
+              {/* Step 4: Confirmation */}
+              {currentStep === 4 && (
                 <motion.div
-                  key="step5"
-                  variants={stepVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="space-y-6"
-                >
-                  <div className="text-center mb-8">
-                    <CreditCardIcon className="w-16 h-16 mx-auto text-indigo-600 mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Information</h2>
-                    <p className="text-gray-600">Secure payment processing with 256-bit encryption</p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-6">
-                      <div>
-                        <Label htmlFor="cardNumber" className="text-base font-semibold">Card Number *</Label>
-                        <Input
-                          id="cardNumber"
-                          placeholder="1234 5678 9012 3456"
-                          value={data.cardNumber}
-                          onChange={(e) => updateData('cardNumber', e.target.value)}
-                          className="mt-2 h-12"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="expiry" className="text-base font-semibold">Expiry Date *</Label>
-                          <Input
-                            id="expiry"
-                            placeholder="MM/YY"
-                            value={data.expiryDate}
-                            onChange={(e) => updateData('expiryDate', e.target.value)}
-                            className="mt-2 h-12"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="cvv" className="text-base font-semibold">CVV *</Label>
-                          <Input
-                            id="cvv"
-                            placeholder="123"
-                            value={data.cvv}
-                            onChange={(e) => updateData('cvv', e.target.value)}
-                            className="mt-2 h-12"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label htmlFor="billing" className="text-base font-semibold">Billing Address *</Label>
-                        <Input
-                          id="billing"
-                          placeholder="123 Main St, City, State 12345"
-                          value={data.billingAddress}
-                          onChange={(e) => updateData('billingAddress', e.target.value)}
-                          className="mt-2 h-12"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Order Summary */}
-                    <div className="bg-gray-50 p-6 rounded-2xl">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
-                      <div className="space-y-4">
-                        {(() => {
-                          const selectedPlan = plans.find(p => p.id === data.plan)!;
-                          const monthlyPrice = data.billingCycle === 'annual' 
-                            ? Math.round(selectedPlan.price * 0.83) 
-                            : selectedPlan.price;
-                          const totalPrice = data.billingCycle === 'annual' 
-                            ? monthlyPrice * 12 
-                            : monthlyPrice;
-
-                          return (
-                            <>
-                              <div className="flex justify-between">
-                                <span>{selectedPlan.name} Plan</span>
-                                <span>${monthlyPrice}/month</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span>Billing Cycle</span>
-                                <span className="capitalize">{data.billingCycle}</span>
-                              </div>
-                              {data.billingCycle === 'annual' && (
-                                <div className="flex justify-between text-green-600">
-                                  <span>Annual Discount</span>
-                                  <span>-${Math.round(selectedPlan.price * 12 * 0.17)}</span>
-                                </div>
-                              )}
-                              <hr />
-                              <div className="flex justify-between font-semibold text-lg">
-                                <span>Total {data.billingCycle === 'annual' ? '(Annual)' : '(Monthly)'}</span>
-                                <span>${totalPrice}</span>
-                              </div>
-                              <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                                <p className="text-sm text-blue-800">
-                                  <strong>14-day free trial</strong><br />
-                                  You won't be charged until your trial ends. Cancel anytime.
-                                </p>
-                              </div>
-                            </>
-                          );
-                        })()}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Step 6: Confirmation */}
-              {currentStep === 6 && (
-                <motion.div
-                  key="step6"
+                  key="step4"
                   variants={stepVariants}
                   initial="hidden"
                   animate="visible"
@@ -652,9 +692,9 @@ const OnboardingPage = () => {
                     <div className="w-24 h-24 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
                       <CheckCircleIcon className="w-12 h-12 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">You're All Set!</h2>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to Start Your Free Trial!</h2>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                      Your account has been created successfully. We're setting up your workspace now.
+                      Review your information and start your 14-day free trial. No payment required!
                     </p>
                   </div>
 
@@ -675,24 +715,49 @@ const OnboardingPage = () => {
                           <div>{data.adminEmail}</div>
                         </div>
                         <div>
+                          <span className="font-medium text-gray-700">WhatsApp:</span>
+                          <div>{data.adminWhatsapp}</div>
+                        </div>
+                        <div>
                           <span className="font-medium text-gray-700">Workspace URL:</span>
-                          <div className="font-mono">https://{data.subdomain}.yoursaas.com</div>
+                          <div className="font-mono">https://{data.subdomain}.pondokdigital.com</div>
                         </div>
                       </div>
                     </Card>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6">
+                    <div className="bg-blue-50 p-6 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2">What happens next?</h4>
+                      <ul className="text-sm text-blue-800 space-y-1">
+                        <li>• Your 14-day free trial starts immediately</li>
+                        <li>• Our sales team will contact you via WhatsApp within 24 hours</li>
+                        <li>• We'll help you set up and customize your system</li>
+                        <li>• No payment required until your trial period ends</li>
+                        <li>• Cancel anytime during the trial with no charges</li>
+                      </ul>
+                    </div>
+                    
                     <Button
                       onClick={handleSubmit}
-                      className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-8 py-4 text-lg"
+                      disabled={loading}
+                      className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold px-8 py-4 text-lg disabled:opacity-50"
                     >
-                      Access Your Dashboard
-                      <ArrowRightIcon className="w-5 h-5 ml-2" />
+                      {loading ? (
+                        <>
+                          <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                          Creating Your Trial...
+                        </>
+                      ) : (
+                        <>
+                          Start My Free Trial
+                          <ArrowRightIcon className="w-5 h-5 ml-2" />
+                        </>
+                      )}
                     </Button>
                     
                     <p className="text-sm text-gray-600">
-                      A confirmation email has been sent to {data.adminEmail}
+                      By starting your trial, you agree to receive WhatsApp messages from our sales team for onboarding support.
                     </p>
                   </div>
                 </motion.div>
@@ -700,7 +765,7 @@ const OnboardingPage = () => {
             </AnimatePresence>
 
             {/* Navigation */}
-            {currentStep < 6 && (
+            {currentStep < 4 && (
               <div className="flex justify-between mt-12 pt-8 border-t border-gray-200">
                 <Button
                   onClick={prevStep}
@@ -714,9 +779,10 @@ const OnboardingPage = () => {
                 
                 <Button
                   onClick={nextStep}
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white flex items-center gap-2"
+                  disabled={loading}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white flex items-center gap-2 disabled:opacity-50"
                 >
-                  Next Step
+                  {currentStep === 3 ? 'Review & Start Trial' : 'Next Step'}
                   <ArrowRightIcon className="w-4 h-4" />
                 </Button>
               </div>
@@ -724,7 +790,7 @@ const OnboardingPage = () => {
           </Card>
 
           {/* Trust Indicators */}
-          {currentStep === 5 && (
+          {currentStep === 4 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -733,15 +799,15 @@ const OnboardingPage = () => {
               <div className="flex justify-center items-center gap-8 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   <ShieldCheckIcon className="w-5 h-5" />
-                  <span>256-bit SSL Encryption</span>
+                  <span>Secure & Trusted</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircleIcon className="w-5 h-5" />
-                  <span>PCI Compliant</span>
+                  <span>14-Day Free Trial</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <UsersIcon className="w-5 h-5" />
-                  <span>Trusted by 2,500+ Companies</span>
+                  <span>Dedicated Support</span>
                 </div>
               </div>
             </motion.div>
