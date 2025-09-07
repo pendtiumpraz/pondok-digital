@@ -40,7 +40,10 @@ export async function GET(
       try {
         const pdfBuffer = await InvoiceGenerator.generateInvoicePDF(invoiceId)
         
-        return new NextResponse(pdfBuffer, {
+        // Convert Buffer to Uint8Array for NextResponse
+        const pdfUint8Array = new Uint8Array(pdfBuffer)
+        
+        return new NextResponse(pdfUint8Array, {
           status: 200,
           headers: {
             'Content-Type': 'application/pdf',
