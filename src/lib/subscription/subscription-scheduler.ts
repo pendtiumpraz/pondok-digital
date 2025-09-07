@@ -341,12 +341,11 @@ export class SubscriptionScheduler {
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
 
     try {
-      // TODO: Add BillingEvent model to Prisma schema
-      // await prisma.billingEvent?.deleteMany({
-      //   where: {
-      //     createdAt: { lt: sixMonthsAgo }
-      //   }
-      // })
+      await prisma.billingEvent?.deleteMany({
+        where: {
+          createdAt: { lt: sixMonthsAgo }
+        }
+      })
 
       // Clean up old notifications
       await prisma.notification?.deleteMany({

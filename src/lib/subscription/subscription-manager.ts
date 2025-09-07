@@ -492,13 +492,12 @@ export class SubscriptionManager {
    */
   private static async createBillingEvent(event: Omit<BillingEvent, 'id' | 'createdAt'>): Promise<void> {
     try {
-      // TODO: Add BillingEvent model to Prisma schema
-      // await prisma.billingEvent?.create({
-      //   data: {
-      //     ...event,
-      //     createdAt: new Date()
-      //   }
-      // })
+      await prisma.billingEvent?.create({
+        data: {
+          ...event,
+          createdAt: new Date()
+        }
+      })
     } catch (error) {
       console.error('Failed to create billing event:', error)
     }

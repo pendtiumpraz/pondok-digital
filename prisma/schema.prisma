@@ -78,6 +78,10 @@ model Tenant {
   subscription         Subscription?
   invoices            Invoice[]
   paymentTransactions PaymentTransaction[]
+  billingEvents       BillingEvent[]
+  students            Student[]
+  ebooks              Ebook[]
+  financialReports    FinancialReport[]
 
   @@map("tenants")
 }
@@ -264,12 +268,16 @@ model FinancialReport {
   fileUrl   String?
   status    String   @default("GENERATED")
   createdBy String
+  tenantId  String?
+  organizationId String? // alias for compatibility
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   budget    Budget?  @relation(fields: [budgetId], references: [id])
   creator   User     @relation(fields: [createdBy], references: [id])
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id])
 
   @@index([type, period, startDate])
+  @@index([tenantId])
   @@map("financial_reports")
 }
 
@@ -486,10 +494,13 @@ model Ebook {
   isFeatured    Boolean  @default(false)
   isPublic      Boolean  @default(true)
   createdBy     String
+  tenantId      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   creator       User     @relation(fields: [createdBy], references: [id])
+  tenant        Tenant?  @relation(fields: [tenantId], references: [id])
 
+  @@index([tenantId])
   @@map("ebooks")
 }
 
@@ -547,6 +558,7 @@ model Student {
   isActive            Boolean              @default(true)
   graduationDate      DateTime?
   createdBy           String
+  tenantId            String?              // Add tenantId for multi-tenant support
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   registrationId      String?              @unique
@@ -574,8 +586,10 @@ model Student {
   studentClasses      StudentClass[]
   creator             User                 @relation(fields: [createdBy], references: [id])
   registration        Registration?        @relation(fields: [registrationId], references: [id])
+  tenant              Tenant?              @relation(fields: [tenantId], references: [id])
 
   @@index([institutionType, status])
+  @@index([tenantId])
   @@index([enrollmentYear])
   @@index([isOrphan])
   @@map("students")
@@ -2505,13 +2519,13 @@ model TwoFactorVerification {
 
 model SecurityAuditLog {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String?  // Made optional for system operations
   event     String
   metadata  Json?
   ipAddress String   @default("unknown")
   userAgent String   @default("unknown")
   timestamp DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([event])
@@ -3028,6 +3042,7 @@ model Subscription {
   
   invoices             Invoice[]
   transactions         PaymentTransaction[]
+  billingEvents        BillingEvent[]
   tenant               Tenant               @relation(fields: [organizationId], references: [id])
   
   @@index([organizationId])
@@ -3059,6 +3074,7 @@ model Invoice {
   subscription         Subscription         @relation(fields: [subscriptionId], references: [id])
   tenant               Tenant               @relation(fields: [organizationId], references: [id])
   transactions         PaymentTransaction[]
+  billingEvents        BillingEvent[]
   
   @@index([subscriptionId])
   @@index([organizationId])
@@ -3095,4 +3111,24 @@ model PaymentTransaction {
   @@index([organizationId])
   @@index([gatewayTransactionId])
   @@map("payment_transactions")
+}
+
+model BillingEvent {
+  id                   String               @id @default(cuid())
+  type                 String               // SUBSCRIPTION_CREATED, PAYMENT_SUCCESS, etc
+  organizationId       String
+  subscriptionId       String?
+  invoiceId            String?
+  amount               Float?
+  data                 Json?                // Additional event data
+  createdAt            DateTime             @default(now())
+  
+  tenant               Tenant               @relation(fields: [organizationId], references: [id])
+  subscription         Subscription?        @relation(fields: [subscriptionId], references: [id])
+  invoice              Invoice?             @relation(fields: [invoiceId], references: [id])
+  
+  @@index([organizationId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("billing_events")
 }

@@ -33,9 +33,9 @@ export class UsageMonitor {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
     
     // Count students
-    // TODO: Add tenantId to Student model for proper filtering
     const studentCount = await prisma.student.count({
       where: { 
+        tenantId: organizationId,
         isActive: true
       }
     })
@@ -269,9 +269,8 @@ export class UsageMonitor {
     // This would need to be implemented based on actual file storage
     // For now, return approximate calculation
     try {
-      // TODO: Add tenantId to Ebook model for proper filtering
       const fileCount = await prisma.ebook?.count({
-        where: { }
+        where: { tenantId: organizationId }
       }) || 0
 
       const avgFileSizeMB = 5 // Average file size estimation
@@ -335,9 +334,9 @@ export class UsageMonitor {
    */
   private static async getReportsCount(organizationId: string, since: Date): Promise<number> {
     try {
-      // TODO: Add organizationId to FinancialReport model for proper filtering
       return await prisma.financialReport?.count({
         where: {
+          organizationId,
           createdAt: { gte: since }
         }
       }) || 0
@@ -413,18 +412,17 @@ export class UsageMonitor {
     warning: UsageWarning
   ): Promise<void> {
     try {
-      // TODO: Add BillingEvent model to Prisma schema
-      // await prisma.billingEvent?.create({
-      //   data: {
-      //     type: 'USAGE_LIMIT_EXCEEDED',
-      //     organizationId,
-      //     subscriptionId: '', // Would need to get from subscription
-      //     data: {
-      //       warning,
-      //       timestamp: new Date().toISOString()
-      //     }
-      //   }
-      // })
+      await prisma.billingEvent?.create({
+        data: {
+          type: 'USAGE_LIMIT_EXCEEDED',
+          organizationId,
+          subscriptionId: null, // Would need to get from subscription
+          data: JSON.parse(JSON.stringify({
+            warning,
+            timestamp: new Date().toISOString()
+          }))
+        }
+      })
     } catch (error) {
       console.error('Failed to send usage warning:', error)
     }

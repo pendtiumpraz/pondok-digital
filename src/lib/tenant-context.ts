@@ -512,22 +512,20 @@ export async function logTenantOperation(
   const tenant = getCurrentTenantContext()
   
   try {
-    // TODO: SecurityAuditLog model needs to be updated for tenant operations
-    // Currently it requires userId which may not be available
-    // await prisma.securityAuditLog.create({
-    //   data: {
-    //     event: `${operation}_${resourceType}`,
-    //     metadata: {
-    //       resourceId,
-    //       tenantId: tenant?.id,
-    //       tenantName: tenant?.name,
-    //       tenantSlug: tenant?.slug,
-    //       ...additionalData
-    //     },
-    //     timestamp: new Date(),
-    //     userId: 'system' // Need a system user or make userId optional
-    //   }
-    // })
+    await prisma.securityAuditLog.create({
+      data: {
+        event: `${operation}_${resourceType}`,
+        metadata: {
+          resourceId,
+          tenantId: tenant?.id,
+          tenantName: tenant?.name,
+          tenantSlug: tenant?.slug,
+          ...additionalData
+        },
+        timestamp: new Date(),
+        userId: null // Now optional for system operations
+      }
+    })
   } catch (error) {
     console.warn('Failed to log tenant operation:', error)
   }
