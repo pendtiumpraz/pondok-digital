@@ -208,7 +208,7 @@ export function useTenantFeatures() {
     return tenant.settings.features[featureName] === true
   }
 
-  const getFeatureConfig = <T>(featureName: string, defaultConfig: T): T => {
+  const getFeatureConfig = <T,>(featureName: string, defaultConfig: T): T => {
     if (!tenant?.settings?.features?.[featureName]) {
       return defaultConfig
     }
