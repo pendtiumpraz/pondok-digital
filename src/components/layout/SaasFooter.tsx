@@ -1,8 +1,58 @@
 'use client'
 
 import Link from 'next/link'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function SaasFooter() {
+  const { language } = useLanguage()
+
+  const translations = {
+    id: {
+      description: 'Platform SAAS untuk manajemen yayasan pendidikan Islam di Indonesia.',
+      product: 'Produk',
+      features: 'Fitur',
+      pricing: 'Harga',
+      demo: 'Demo',
+      apiDocs: 'Dokumentasi API',
+      company: 'Perusahaan',
+      about: 'Tentang Kami',
+      blog: 'Blog',
+      careers: 'Karir',
+      partners: 'Partner',
+      support: 'Bantuan',
+      helpCenter: 'Pusat Bantuan',
+      documentation: 'Dokumentasi',
+      contact: 'Kontak',
+      serverStatus: 'Status Server',
+      allRights: 'Hak Cipta',
+      privacy: 'Kebijakan Privasi',
+      terms: 'Syarat Layanan'
+    },
+    en: {
+      description: 'SAAS platform for Islamic educational foundation management in Indonesia.',
+      product: 'Product',
+      features: 'Features',
+      pricing: 'Pricing',
+      demo: 'Demo',
+      apiDocs: 'API Documentation',
+      company: 'Company',
+      about: 'About Us',
+      blog: 'Blog',
+      careers: 'Careers',
+      partners: 'Partners',
+      support: 'Support',
+      helpCenter: 'Help Center',
+      documentation: 'Documentation',
+      contact: 'Contact',
+      serverStatus: 'Server Status',
+      allRights: 'All rights reserved',
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Service'
+    }
+  }
+
+  const t = translations[language]
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
@@ -16,32 +66,32 @@ export default function SaasFooter() {
               <span className="font-bold text-xl">Pondok Digital</span>
             </div>
             <p className="text-sm text-gray-400">
-              Platform SAAS untuk manajemen yayasan pendidikan Islam di Indonesia.
+              {t.description}
             </p>
           </div>
 
           {/* Product */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Produk</h3>
+            <h3 className="font-semibold text-lg mb-4">{t.product}</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <Link href="/features" className="hover:text-white">
-                  Fitur
+                  {t.features}
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="hover:text-white">
-                  Harga
+                  {t.pricing}
                 </Link>
               </li>
               <li>
                 <Link href="/yayasan/imam-syafii" target="_blank" rel="noopener noreferrer" className="hover:text-white">
-                  Demo
+                  {t.demo}
                 </Link>
               </li>
               <li>
                 <Link href="/api-docs" className="hover:text-white">
-                  Dokumentasi API
+                  {t.apiDocs}
                 </Link>
               </li>
             </ul>
@@ -49,26 +99,26 @@ export default function SaasFooter() {
 
           {/* Company */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Perusahaan</h3>
+            <h3 className="font-semibold text-lg mb-4">{t.company}</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <Link href="/about" className="hover:text-white">
-                  Tentang Kami
+                  {t.about}
                 </Link>
               </li>
               <li>
                 <Link href="/blog" className="hover:text-white">
-                  Blog
+                  {t.blog}
                 </Link>
               </li>
               <li>
                 <Link href="/careers" className="hover:text-white">
-                  Karir
+                  {t.careers}
                 </Link>
               </li>
               <li>
                 <Link href="/partners" className="hover:text-white">
-                  Partner
+                  {t.partners}
                 </Link>
               </li>
             </ul>
@@ -76,26 +126,26 @@ export default function SaasFooter() {
 
           {/* Support */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Bantuan</h3>
+            <h3 className="font-semibold text-lg mb-4">{t.support}</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <Link href="/help" className="hover:text-white">
-                  Pusat Bantuan
+                  {t.helpCenter}
                 </Link>
               </li>
               <li>
                 <Link href="/docs" className="hover:text-white">
-                  Dokumentasi
+                  {t.documentation}
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="hover:text-white">
-                  Kontak
+                  {t.contact}
                 </Link>
               </li>
               <li>
                 <Link href="/status" className="hover:text-white">
-                  Status Server
+                  {t.serverStatus}
                 </Link>
               </li>
             </ul>
@@ -103,13 +153,13 @@ export default function SaasFooter() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2024 Pondok Digital. All rights reserved.</p>
+          <p>&copy; 2024 Pondok Digital. {t.allRights}.</p>
           <div className="mt-2 space-x-4">
             <Link href="/privacy" className="hover:text-white">
-              Kebijakan Privasi
+              {t.privacy}
             </Link>
             <Link href="/terms" className="hover:text-white">
-              Syarat Layanan
+              {t.terms}
             </Link>
           </div>
         </div>

@@ -4,10 +4,11 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { Menu, X, Globe } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function SaasHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [language, setLanguage] = useState<'id' | 'en'>('id')
+  const { language, setLanguage } = useLanguage()
 
   const translations = {
     id: {

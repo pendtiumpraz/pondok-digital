@@ -1,5 +1,6 @@
 'use client'
 
+import { useLanguage } from '@/contexts/LanguageContext'
 import { motion } from 'framer-motion'
 import { 
   BookOpen, Users, DollarSign, FileText, Heart, BarChart3,
@@ -8,114 +9,151 @@ import {
   GraduationCap, Building, UserCheck, CreditCard, PieChart, Bell
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import SaasHeader from '@/components/layout/SaasHeader'
+import SaasFooter from '@/components/layout/SaasFooter'
 import Link from 'next/link'
 
 export default function FeaturesPage() {
+  const { language } = useLanguage()
+
+  const translations = {
+    id: {
+      title: 'Fitur Lengkap untuk',
+      titleHighlight: ' Pesantren Modern',
+      subtitle: 'Platform all-in-one yang mengintegrasikan semua aspek manajemen pesantren, dari akademik hingga keuangan, dalam satu sistem yang mudah digunakan',
+      viewDemo: 'Lihat Demo',
+      viewPricing: 'Lihat Harga',
+      benefitsTitle: 'Keuntungan Menggunakan Pondok Digital',
+      benefitsSubtitle: 'Lebih dari sekedar software, kami adalah partner transformasi digital Anda',
+      ctaTitle: 'Siap Transformasi Digital?',
+      ctaSubtitle: 'Bergabung dengan ratusan pesantren yang telah meningkatkan efisiensi operasional hingga 80% dengan Pondok Digital',
+      startFree: 'Mulai Gratis Sekarang',
+      consultation: 'Konsultasi Gratis',
+      footer: 'Tidak perlu kartu kredit • Setup instan • Cancel kapan saja'
+    },
+    en: {
+      title: 'Complete Features for',
+      titleHighlight: ' Modern Pesantren',
+      subtitle: 'An all-in-one platform that integrates all aspects of pesantren management, from academics to finance, in one easy-to-use system',
+      viewDemo: 'View Demo',
+      viewPricing: 'View Pricing',
+      benefitsTitle: 'Benefits of Using Pondok Digital',
+      benefitsSubtitle: 'More than just software, we are your digital transformation partner',
+      ctaTitle: 'Ready for Digital Transformation?',
+      ctaSubtitle: 'Join hundreds of pesantren that have increased operational efficiency by up to 80% with Pondok Digital',
+      startFree: 'Start Free Now',
+      consultation: 'Free Consultation',
+      footer: 'No credit card required • Instant setup • Cancel anytime'
+    }
+  }
+
+  const t = translations[language]
+
   const features = [
     {
-      category: 'Akademik',
+      category: language === 'id' ? 'Akademik' : 'Academic',
       icon: GraduationCap,
       color: 'from-blue-500 to-indigo-600',
       items: [
         {
-          title: 'Manajemen Kurikulum',
-          description: 'Kelola kurikulum diniyah dan formal dengan mudah',
+          title: language === 'id' ? 'Manajemen Kurikulum' : 'Curriculum Management',
+          description: language === 'id' ? 'Kelola kurikulum diniyah dan formal dengan mudah' : 'Manage diniyah and formal curricula with ease',
           icon: BookOpen
         },
         {
-          title: 'Jadwal Pelajaran',
-          description: 'Atur jadwal otomatis untuk semua tingkatan',
+          title: language === 'id' ? 'Jadwal Pelajaran' : 'Class Schedule',
+          description: language === 'id' ? 'Atur jadwal otomatis untuk semua tingkatan' : 'Automatic scheduling for all levels',
           icon: Calendar
         },
         {
-          title: 'Penilaian Digital',
-          description: 'Input nilai dan generate rapor otomatis',
+          title: language === 'id' ? 'Penilaian Digital' : 'Digital Assessment',
+          description: language === 'id' ? 'Input nilai dan generate rapor otomatis' : 'Input grades and generate automatic reports',
           icon: FileText
         },
         {
-          title: 'E-Learning',
-          description: 'Platform pembelajaran online terintegrasi',
+          title: language === 'id' ? 'E-Learning' : 'E-Learning',
+          description: language === 'id' ? 'Platform pembelajaran online terintegrasi' : 'Integrated online learning platform',
           icon: School
         }
       ]
     },
     {
-      category: 'Keuangan',
+      category: language === 'id' ? 'Keuangan' : 'Finance',
       icon: DollarSign,
       color: 'from-green-500 to-emerald-600',
       items: [
         {
-          title: 'Pembukuan Otomatis',
-          description: 'Pencatatan keuangan real-time dan akurat',
+          title: language === 'id' ? 'Pembukuan Otomatis' : 'Automatic Bookkeeping',
+          description: language === 'id' ? 'Pencatatan keuangan real-time dan akurat' : 'Real-time and accurate financial recording',
           icon: PieChart
         },
         {
-          title: 'Payment Gateway',
-          description: 'Terima pembayaran SPP online',
+          title: language === 'id' ? 'Payment Gateway' : 'Payment Gateway',
+          description: language === 'id' ? 'Terima pembayaran SPP online' : 'Accept online tuition payments',
           icon: CreditCard
         },
         {
-          title: 'Laporan Keuangan',
-          description: 'Dashboard keuangan transparan',
+          title: language === 'id' ? 'Laporan Keuangan' : 'Financial Reports',
+          description: language === 'id' ? 'Dashboard keuangan transparan' : 'Transparent financial dashboard',
           icon: BarChart3
         },
         {
-          title: 'Manajemen Donasi',
-          description: 'Kelola donasi dan wakaf digital',
+          title: language === 'id' ? 'Manajemen Donasi' : 'Donation Management',
+          description: language === 'id' ? 'Kelola donasi dan wakaf digital' : 'Manage digital donations and waqf',
           icon: HeartHandshake
         }
       ]
     },
     {
-      category: 'Santri & Wali',
+      category: language === 'id' ? 'Santri & Wali' : 'Students & Parents',
       icon: Users,
       color: 'from-purple-500 to-pink-600',
       items: [
         {
-          title: 'Database Santri',
-          description: 'Profil lengkap santri dan riwayat pendidikan',
+          title: language === 'id' ? 'Database Santri' : 'Student Database',
+          description: language === 'id' ? 'Profil lengkap santri dan riwayat pendidikan' : 'Complete student profiles and educational history',
           icon: UserCheck
         },
         {
-          title: 'Absensi Digital',
-          description: 'Presensi dengan QR code atau biometrik',
+          title: language === 'id' ? 'Absensi Digital' : 'Digital Attendance',
+          description: language === 'id' ? 'Presensi dengan QR code atau biometrik' : 'Attendance with QR code or biometric',
           icon: Shield
         },
         {
-          title: 'Portal Wali Santri',
-          description: 'Akses informasi santri untuk orang tua',
+          title: language === 'id' ? 'Portal Wali Santri' : 'Parent Portal',
+          description: language === 'id' ? 'Akses informasi santri untuk orang tua' : 'Student information access for parents',
           icon: Smartphone
         },
         {
-          title: 'Notifikasi Real-time',
-          description: 'Update instant ke wali santri',
+          title: language === 'id' ? 'Notifikasi Real-time' : 'Real-time Notifications',
+          description: language === 'id' ? 'Update instant ke wali santri' : 'Instant updates to parents',
           icon: Bell
         }
       ]
     },
     {
-      category: 'Manajemen Yayasan',
+      category: language === 'id' ? 'Manajemen Yayasan' : 'Foundation Management',
       icon: Building,
       color: 'from-orange-500 to-red-600',
       items: [
         {
-          title: 'Multi-Lembaga',
-          description: 'Kelola TK, SD, SMP, SMA dalam satu sistem',
+          title: language === 'id' ? 'Multi-Lembaga' : 'Multi-Institution',
+          description: language === 'id' ? 'Kelola TK, SD, SMP, SMA dalam satu sistem' : 'Manage KG, Primary, Middle, High School in one system',
           icon: Building
         },
         {
-          title: 'Manajemen SDM',
-          description: 'Database guru, ustadz, dan karyawan',
+          title: language === 'id' ? 'Manajemen SDM' : 'HR Management',
+          description: language === 'id' ? 'Database guru, ustadz, dan karyawan' : 'Database of teachers, ustadz, and employees',
           icon: Users
         },
         {
-          title: 'Inventaris & Aset',
-          description: 'Tracking aset dan inventaris yayasan',
+          title: language === 'id' ? 'Inventaris & Aset' : 'Inventory & Assets',
+          description: language === 'id' ? 'Tracking aset dan inventaris yayasan' : 'Foundation asset and inventory tracking',
           icon: FileText
         },
         {
-          title: 'Dokumen Digital',
-          description: 'Arsip digital dengan backup otomatis',
+          title: language === 'id' ? 'Dokumen Digital' : 'Digital Documents',
+          description: language === 'id' ? 'Arsip digital dengan backup otomatis' : 'Digital archive with automatic backup',
           icon: Cloud
         }
       ]
@@ -125,38 +163,40 @@ export default function FeaturesPage() {
   const benefits = [
     {
       icon: Zap,
-      title: 'Hemat Waktu',
-      description: 'Otomasi tugas administratif hingga 80%'
+      title: language === 'id' ? 'Hemat Waktu' : 'Save Time',
+      description: language === 'id' ? 'Otomasi tugas administratif hingga 80%' : 'Automate administrative tasks up to 80%'
     },
     {
       icon: Shield,
-      title: 'Keamanan Data',
-      description: 'Enkripsi tingkat bank untuk semua data'
+      title: language === 'id' ? 'Keamanan Data' : 'Data Security',
+      description: language === 'id' ? 'Enkripsi tingkat bank untuk semua data' : 'Bank-level encryption for all data'
     },
     {
       icon: RefreshCw,
-      title: 'Update Otomatis',
-      description: 'Fitur baru setiap bulan tanpa biaya tambahan'
+      title: language === 'id' ? 'Update Otomatis' : 'Automatic Updates',
+      description: language === 'id' ? 'Fitur baru setiap bulan tanpa biaya tambahan' : 'New features every month at no extra cost'
     },
     {
       icon: Globe,
-      title: 'Akses Dimana Saja',
-      description: 'Cloud-based, akses dari perangkat apapun'
+      title: language === 'id' ? 'Akses Dimana Saja' : 'Access Anywhere',
+      description: language === 'id' ? 'Cloud-based, akses dari perangkat apapun' : 'Cloud-based, access from any device'
     },
     {
       icon: HeartHandshake,
-      title: 'Support 24/7',
-      description: 'Tim support siap membantu kapan saja'
+      title: language === 'id' ? 'Support 24/7' : '24/7 Support',
+      description: language === 'id' ? 'Tim support siap membantu kapan saja' : 'Support team ready to help anytime'
     },
     {
       icon: Lock,
-      title: 'Backup Otomatis',
-      description: 'Data aman dengan backup harian'
+      title: language === 'id' ? 'Backup Otomatis' : 'Automatic Backup',
+      description: language === 'id' ? 'Data aman dengan backup harian' : 'Safe data with daily backup'
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen flex flex-col">
+      <SaasHeader />
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-blue-50 opacity-50" />
@@ -167,23 +207,22 @@ export default function FeaturesPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Fitur Lengkap untuk
-              <span className="text-green-600"> Pesantren Modern</span>
+              {t.title}
+              <span className="text-green-600">{t.titleHighlight}</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Platform all-in-one yang mengintegrasikan semua aspek manajemen pesantren, 
-              dari akademik hingga keuangan, dalam satu sistem yang mudah digunakan
+              {t.subtitle}
             </p>
             <div className="flex gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/yayasan/imam-syafii">
-                  Lihat Demo
+                  {t.viewDemo}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link href="/pricing">
-                  Lihat Harga
+                  {t.viewPricing}
                 </Link>
               </Button>
             </div>
@@ -246,10 +285,10 @@ export default function FeaturesPage() {
             className="text-center mb-12"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Keuntungan Menggunakan Pondok Digital
+              {t.benefitsTitle}
             </h2>
             <p className="text-xl text-gray-600">
-              Lebih dari sekedar software, kami adalah partner transformasi digital Anda
+              {t.benefitsSubtitle}
             </p>
           </motion.div>
 
@@ -283,30 +322,31 @@ export default function FeaturesPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl font-bold text-white mb-6">
-              Siap Transformasi Digital?
+              {t.ctaTitle}
             </h2>
             <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-              Bergabung dengan ratusan pesantren yang telah meningkatkan efisiensi 
-              operasional hingga 80% dengan Pondok Digital
+              {t.ctaSubtitle}
             </p>
             <div className="flex gap-4 justify-center">
               <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100" asChild>
                 <Link href="/onboarding">
-                  Mulai Gratis Sekarang
+                  {t.startFree}
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
                 <Link href="/contact">
-                  Konsultasi Gratis
+                  {t.consultation}
                 </Link>
               </Button>
             </div>
             <p className="text-sm text-green-100 mt-4">
-              Tidak perlu kartu kredit • Setup instan • Cancel kapan saja
+              {t.footer}
             </p>
           </motion.div>
         </div>
       </section>
+      </div>
+      <SaasFooter />
     </div>
   )
 }

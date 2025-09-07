@@ -10,8 +10,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card } from '@/components/ui/card'
+import SaasHeader from '@/components/layout/SaasHeader'
+import SaasFooter from '@/components/layout/SaasFooter'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function ContactPage() {
+  const { language } = useLanguage()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,6 +25,91 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const translations = {
+    id: {
+      title: 'Hubungi',
+      titleHighlight: 'Kami',
+      subtitle: 'Tim kami siap membantu Anda dalam transformasi digital pesantren. Konsultasi gratis untuk mengetahui solusi terbaik untuk yayasan Anda.',
+      phone: 'Telepon',
+      phoneSubtitle: 'Senin - Jumat, 08:00 - 17:00 WIB',
+      email: 'Email',
+      address: 'Alamat',
+      addressContent: 'Jl. Teknologi No. 123',
+      addressSubcontent: 'Jakarta Selatan, Indonesia 12345',
+      whatsapp: 'WhatsApp',
+      whatsappSubtitle: 'Respon cepat via WhatsApp',
+      sendMessage: 'Kirim Pesan',
+      fullName: 'Nama Lengkap',
+      fullNamePlaceholder: 'Nama Anda',
+      emailPlaceholder: 'email@example.com',
+      phoneLabel: 'No. Telepon',
+      phonePlaceholder: '+62 812-xxxx-xxxx',
+      foundationName: 'Nama Yayasan',
+      foundationPlaceholder: 'Yayasan/Pesantren Anda',
+      messageLabel: 'Pesan',
+      messagePlaceholder: 'Ceritakan kebutuhan Anda...',
+      sending: 'Mengirim...',
+      sent: 'Pesan Terkirim!',
+      send: 'Kirim Pesan',
+      operatingHours: 'Jam Operasional',
+      monday: 'Senin - Jumat',
+      saturday: 'Sabtu',
+      sunday: 'Minggu & Hari Libur',
+      closed: 'Tutup',
+      responseTime: 'Respon email dalam 1x24 jam pada hari kerja',
+      followUs: 'Ikuti Kami',
+      followSubtitle: 'Dapatkan update terbaru dan tips manajemen pesantren di media sosial kami',
+      mapLocation: 'Peta Lokasi',
+      mapIntegration: 'Google Maps integration',
+      otherQuestions: 'Punya Pertanyaan Lain?',
+      otherSubtitle: 'Cek halaman FAQ kami atau langsung konsultasi dengan tim sales',
+      viewFaq: 'Lihat FAQ',
+      chatWhatsapp: 'Chat WhatsApp'
+    },
+    en: {
+      title: 'Contact',
+      titleHighlight: 'Us',
+      subtitle: 'Our team is ready to help you with pesantren digital transformation. Free consultation to find the best solution for your foundation.',
+      phone: 'Phone',
+      phoneSubtitle: 'Monday - Friday, 08:00 - 17:00 WIB',
+      email: 'Email',
+      address: 'Address',
+      addressContent: 'Jl. Teknologi No. 123',
+      addressSubcontent: 'South Jakarta, Indonesia 12345',
+      whatsapp: 'WhatsApp',
+      whatsappSubtitle: 'Quick response via WhatsApp',
+      sendMessage: 'Send Message',
+      fullName: 'Full Name',
+      fullNamePlaceholder: 'Your Name',
+      emailPlaceholder: 'email@example.com',
+      phoneLabel: 'Phone Number',
+      phonePlaceholder: '+62 812-xxxx-xxxx',
+      foundationName: 'Foundation Name',
+      foundationPlaceholder: 'Your Foundation/Pesantren',
+      messageLabel: 'Message',
+      messagePlaceholder: 'Tell us your needs...',
+      sending: 'Sending...',
+      sent: 'Message Sent!',
+      send: 'Send Message',
+      operatingHours: 'Operating Hours',
+      monday: 'Monday - Friday',
+      saturday: 'Saturday',
+      sunday: 'Sunday & Holidays',
+      closed: 'Closed',
+      responseTime: 'Email response within 24 hours on working days',
+      followUs: 'Follow Us',
+      followSubtitle: 'Get the latest updates and pesantren management tips on our social media',
+      mapLocation: 'Map Location',
+      mapIntegration: 'Google Maps integration',
+      otherQuestions: 'Have Other Questions?',
+      otherSubtitle: 'Check our FAQ page or directly consult with our sales team',
+      viewFaq: 'View FAQ',
+      chatWhatsapp: 'Chat WhatsApp'
+    }
+  }
+
+  const t = translations[language]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,27 +144,27 @@ export default function ContactPage() {
   const contactInfo = [
     {
       icon: Phone,
-      title: 'Telepon',
+      title: t.phone,
       content: '+62 812-3456-7890',
-      subContent: 'Senin - Jumat, 08:00 - 17:00 WIB'
+      subContent: t.phoneSubtitle
     },
     {
       icon: Mail,
-      title: 'Email',
+      title: t.email,
       content: 'info@pondokdigital.id',
       subContent: 'support@pondokdigital.id'
     },
     {
       icon: MapPin,
-      title: 'Alamat',
-      content: 'Jl. Teknologi No. 123',
-      subContent: 'Jakarta Selatan, Indonesia 12345'
+      title: t.address,
+      content: t.addressContent,
+      subContent: t.addressSubcontent
     },
     {
       icon: MessageSquare,
-      title: 'WhatsApp',
+      title: t.whatsapp,
       content: '+62 812-3456-7890',
-      subContent: 'Respon cepat via WhatsApp'
+      subContent: t.whatsappSubtitle
     }
   ]
 
@@ -87,7 +176,9 @@ export default function ContactPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen flex flex-col">
+      <SaasHeader />
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-blue-50 opacity-50" />
@@ -98,11 +189,10 @@ export default function ContactPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Hubungi <span className="text-green-600">Kami</span>
+              {t.title} <span className="text-green-600">{t.titleHighlight}</span>
             </h1>
             <p className="text-xl text-gray-600">
-              Tim kami siap membantu Anda dalam transformasi digital pesantren. 
-              Konsultasi gratis untuk mengetahui solusi terbaik untuk yayasan Anda.
+              {t.subtitle}
             </p>
           </motion.div>
         </div>
@@ -149,20 +239,20 @@ export default function ContactPage() {
             >
               <Card className="p-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                  Kirim Pesan
+                  {t.sendMessage}
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Nama Lengkap *
+                        {t.fullName} *
                       </label>
                       <Input
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        placeholder="Nama Anda"
+                        placeholder={t.fullNamePlaceholder}
                       />
                     </div>
                     <div>
@@ -175,7 +265,7 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        placeholder="email@example.com"
+                        placeholder={t.emailPlaceholder}
                       />
                     </div>
                   </div>
@@ -183,31 +273,31 @@ export default function ContactPage() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        No. Telepon
+                        {t.phoneLabel}
                       </label>
                       <Input
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="+62 812-xxxx-xxxx"
+                        placeholder={t.phonePlaceholder}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Nama Yayasan
+                        {t.foundationName}
                       </label>
                       <Input
                         name="yayasan"
                         value={formData.yayasan}
                         onChange={handleChange}
-                        placeholder="Yayasan/Pesantren Anda"
+                        placeholder={t.foundationPlaceholder}
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Pesan *
+                      {t.messageLabel} *
                     </label>
                     <Textarea
                       name="message"
@@ -215,7 +305,7 @@ export default function ContactPage() {
                       onChange={handleChange}
                       required
                       rows={5}
-                      placeholder="Ceritakan kebutuhan Anda..."
+                      placeholder={t.messagePlaceholder}
                     />
                   </div>
 
@@ -228,14 +318,14 @@ export default function ContactPage() {
                     {isSubmitted ? (
                       <>
                         <CheckCircle className="mr-2 h-5 w-5" />
-                        Pesan Terkirim!
+                        {t.sent}
                       </>
                     ) : isSubmitting ? (
-                      'Mengirim...'
+                      t.sending
                     ) : (
                       <>
                         <Send className="mr-2 h-5 w-5" />
-                        Kirim Pesan
+                        {t.send}
                       </>
                     )}
                   </Button>
@@ -253,27 +343,27 @@ export default function ContactPage() {
               {/* Office Hours */}
               <Card className="p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Jam Operasional
+                  {t.operatingHours}
                 </h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-gray-600">Senin - Jumat</span>
+                    <span className="text-gray-600">{t.monday}</span>
                     <span className="font-medium text-gray-900">08:00 - 17:00 WIB</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-gray-600">Sabtu</span>
+                    <span className="text-gray-600">{t.saturday}</span>
                     <span className="font-medium text-gray-900">09:00 - 15:00 WIB</span>
                   </div>
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-gray-600">Minggu & Hari Libur</span>
-                    <span className="font-medium text-red-600">Tutup</span>
+                    <span className="text-gray-600">{t.sunday}</span>
+                    <span className="font-medium text-red-600">{t.closed}</span>
                   </div>
                 </div>
                 
                 <div className="mt-6 p-4 bg-green-50 rounded-lg">
                   <p className="text-sm text-green-800">
                     <Clock className="inline-block w-4 h-4 mr-1" />
-                    Respon email dalam 1x24 jam pada hari kerja
+                    {t.responseTime}
                   </p>
                 </div>
               </Card>
@@ -281,10 +371,10 @@ export default function ContactPage() {
               {/* Social Media */}
               <Card className="p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Ikuti Kami
+                  {t.followUs}
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Dapatkan update terbaru dan tips manajemen pesantren di media sosial kami
+                  {t.followSubtitle}
                 </p>
                 <div className="flex gap-4">
                   {socialMedia.map((social) => (
@@ -304,8 +394,8 @@ export default function ContactPage() {
               <Card className="p-8 h-64 flex items-center justify-center bg-gray-100">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600">Peta Lokasi</p>
-                  <p className="text-sm text-gray-500">Google Maps integration</p>
+                  <p className="text-gray-600">{t.mapLocation}</p>
+                  <p className="text-sm text-gray-500">{t.mapIntegration}</p>
                 </div>
               </Card>
             </motion.div>
@@ -322,22 +412,24 @@ export default function ContactPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl font-bold text-white mb-6">
-              Punya Pertanyaan Lain?
+              {t.otherQuestions}
             </h2>
             <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-              Cek halaman FAQ kami atau langsung konsultasi dengan tim sales
+              {t.otherSubtitle}
             </p>
             <div className="flex gap-4 justify-center">
               <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100">
-                Lihat FAQ
+                {t.viewFaq}
               </Button>
               <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
-                Chat WhatsApp
+                {t.chatWhatsapp}
               </Button>
             </div>
           </motion.div>
         </div>
       </section>
+      </div>
+      <SaasFooter />
     </div>
   )
 }

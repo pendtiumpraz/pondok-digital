@@ -177,19 +177,19 @@ export default function HomePage() {
                 className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full text-white mb-8"
               >
                 <SparklesIcon className="w-5 h-5 mr-2 text-cyan-400" />
-                <span className="text-sm font-medium">Next-Generation SaaS Platform</span>
+                <span className="text-sm font-medium">{t.badge}</span>
               </motion.div>
               
               <motion.h1
                 variants={fadeInUp}
                 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight"
               >
-                Scale Your
+                {t.heroTitle}
                 <span className="block bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  Business
+                  {t.heroHighlight}
                 </span>
                 <span className="block text-4xl lg:text-5xl font-normal text-blue-100 mt-4">
-                  with Multi-Tenant SaaS
+                  {t.heroSubtitle}
                 </span>
               </motion.h1>
               
@@ -197,8 +197,7 @@ export default function HomePage() {
                 variants={fadeInUp}
                 className="text-xl text-blue-100 mb-8 leading-relaxed max-w-2xl"
               >
-                Empower your organization with our cutting-edge multi-tenant platform. 
-                Custom branding, advanced analytics, and enterprise-grade security - all in one solution.
+                {t.heroDescription}
               </motion.p>
               
               <motion.div
@@ -211,7 +210,7 @@ export default function HomePage() {
                     whileTap={{ scale: 0.95 }}
                     className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center group"
                   >
-                    Start Free Trial
+                    {t.startTrial}
                     <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </motion.button>
                 </Link>
@@ -222,7 +221,7 @@ export default function HomePage() {
                     whileTap={{ scale: 0.95 }}
                     className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-bold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-all duration-300"
                   >
-                    View Pricing
+                    {t.viewPricing}
                   </motion.button>
                 </Link>
               </motion.div>
@@ -234,15 +233,15 @@ export default function HomePage() {
               >
                 <div className="flex items-center gap-2">
                   <CheckCircleIcon className="w-5 h-5 text-green-400" />
-                  <span className="text-sm">No Setup Fees</span>
+                  <span className="text-sm">{t.noSetupFees}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircleIcon className="w-5 h-5 text-green-400" />
-                  <span className="text-sm">Cancel Anytime</span>
+                  <span className="text-sm">{t.cancelAnytime}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircleIcon className="w-5 h-5 text-green-400" />
-                  <span className="text-sm">24/7 Support</span>
+                  <span className="text-sm">{t.support247}</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -356,10 +355,10 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-              Powerful <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Features</span>
+              {t.featuresTitle} <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{t.featuresHighlight}</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Everything you need to build, scale, and manage your multi-tenant SaaS application
+              {t.featuresSubtitle}
             </p>
           </motion.div>
 
@@ -391,7 +390,7 @@ export default function HomePage() {
                     </p>
                     
                     <div className="flex items-center text-indigo-600 font-medium group-hover:translate-x-2 transition-transform">
-                      <span>Learn more</span>
+                      <span>{language === 'id' ? 'Pelajari lebih lanjut' : 'Learn more'}</span>
                       <ArrowRightIcon className="w-4 h-4 ml-2" />
                     </div>
                   </div>
@@ -412,10 +411,10 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-              Why Choose <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Our Platform</span>
+              {t.benefitsTitle} <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">{t.benefitsHighlight}</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Experience the benefits that have made us the preferred choice for thousands of businesses worldwide
+              {t.benefitsSubtitle}
             </p>
           </motion.div>
 
@@ -454,10 +453,10 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl lg:text-6xl font-bold mb-6">
-              Trusted by Industry Leaders
+              {t.trustedTitle}
             </h2>
             <p className="text-xl text-indigo-200 max-w-3xl mx-auto">
-              Join thousands of companies that have transformed their business with our platform
+              {t.trustedSubtitle}
             </p>
           </motion.div>
 
@@ -481,7 +480,7 @@ export default function HomePage() {
                   ))}
                 </div>
                 <div className="text-3xl font-bold mb-2">{testimonial.rating}</div>
-                <div className="text-indigo-200 mb-4">{testimonial.reviews} reviews</div>
+                <div className="text-indigo-200 mb-4">{testimonial.reviews} {t.reviews}</div>
                 <div className="font-semibold">{testimonial.company}</div>
               </motion.div>
             ))}
@@ -515,10 +514,10 @@ export default function HomePage() {
             
             <div className="relative">
               <h2 className="text-4xl lg:text-6xl font-bold mb-6">
-                Ready to Transform Your Business?
+                {t.readyTitle}
               </h2>
               <p className="text-xl text-purple-100 mb-8 max-w-3xl mx-auto">
-                Join thousands of successful companies using our platform. Start your free trial today and experience the difference.
+                {t.readySubtitle}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -529,7 +528,7 @@ export default function HomePage() {
                     className="px-10 py-5 bg-white text-indigo-700 font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3"
                   >
                     <RocketLaunchIcon className="w-6 h-6" />
-                    Start Free Trial
+                    {t.startTrial}
                   </motion.button>
                 </Link>
                 <Link href="/demo">
@@ -538,13 +537,13 @@ export default function HomePage() {
                     whileTap={{ scale: 0.95 }}
                     className="px-10 py-5 bg-white/10 backdrop-blur-sm text-white font-bold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-all duration-300"
                   >
-                    Schedule Demo
+                    {t.scheduleDemo}
                   </motion.button>
                 </Link>
               </div>
 
               <div className="mt-8 text-purple-200 text-sm">
-                No credit card required • 14-day free trial • Cancel anytime
+                {t.noCredit}
               </div>
             </div>
           </motion.div>
