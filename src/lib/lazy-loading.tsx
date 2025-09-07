@@ -108,16 +108,16 @@ export const LazyRoutes = {
     <LoadingStates.Form />
   ),
   
-  // Public routes
-  Donations: withLazyLoading(
-    () => import('@/app/donasi/donate/DonatePageClient'),
-    <LoadingStates.Card />
-  ),
+  // Public routes - Commented out as these are now under /yayasan/[slug]/
+  // Donations: withLazyLoading(
+  //   () => import('@/app/yayasan/[slug]/donasi/donate/DonatePageClient'),
+  //   <LoadingStates.Card />
+  // ),
   
-  PPDB: withLazyLoading(
-    () => import('@/app/ppdb/PPDBPageClient'),
-    <LoadingStates.Form />
-  )
+  // PPDB: withLazyLoading(
+  //   () => import('@/app/yayasan/[slug]/ppdb/PPDBPageClient'),
+  //   <LoadingStates.Form />
+  // )
 }
 
 // Dynamic component loader with error boundary
