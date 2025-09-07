@@ -29,6 +29,19 @@ export async function middleware(request: NextRequest) {
 
   // Apply tenant validation for all other routes
   try {
+    // Check if database URL is configured
+    if (!process.env.DATABASE_URL) {
+      console.warn('DATABASE_URL not configured, skipping tenant validation')
+      const response = NextResponse.next()
+      
+      // Add security headers
+      response.headers.set('x-frame-options', 'DENY')
+      response.headers.set('x-content-type-options', 'nosniff')
+      response.headers.set('referrer-policy', 'strict-origin-when-cross-origin')
+      
+      return response
+    }
+
     const tenantResponse = await tenantValidationMiddleware(request)
     
     // If tenant validation returns an error response, return it
@@ -60,11 +73,32 @@ export async function middleware(request: NextRequest) {
   } catch (error) {
     console.error('Middleware error:', error)
     
-    // Return error response for tenant validation failures
+    // Check if this is a database connection error
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const isDatabaseError = errorMessage.includes('connect') || 
+                          errorMessage.includes('ECONNREFUSED') || 
+                          errorMessage.includes('P1001') ||
+                          errorMessage.includes('database') ||
+                          errorMessage.includes('prisma')
+    
+    // If database error in production, allow request to proceed
+    if (isDatabaseError && process.env.NODE_ENV === 'production') {
+      console.error('Database connection error in middleware, proceeding without tenant validation')
+      const response = NextResponse.next()
+      
+      // Add security headers
+      response.headers.set('x-frame-options', 'DENY')
+      response.headers.set('x-content-type-options', 'nosniff')
+      response.headers.set('referrer-policy', 'strict-origin-when-cross-origin')
+      
+      return response
+    }
+    
+    // Return error response for other failures
     return new NextResponse(
       JSON.stringify({
-        error: 'Tenant validation failed',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        error: 'Middleware error',
+        message: process.env.NODE_ENV === 'development' ? errorMessage : 'Internal server error',
         code: 'MIDDLEWARE_ERROR'
       }),
       {
