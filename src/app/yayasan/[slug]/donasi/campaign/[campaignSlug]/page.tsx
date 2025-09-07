@@ -27,7 +27,7 @@ interface CampaignDetailPageProps {}
 
 export default function CampaignDetailPage({}: CampaignDetailPageProps) {
   const params = useParams()
-  const slug = params.slug as string
+  const campaignSlug = params.campaignSlug as string
   
   const [campaign, setCampaign] = useState<DonationCampaign | null>(null)
   const [updates, setUpdates] = useState<CampaignUpdate[]>([])
@@ -36,17 +36,17 @@ export default function CampaignDetailPage({}: CampaignDetailPageProps) {
   const [activeTab, setActiveTab] = useState<'story' | 'updates' | 'donors'>('story')
 
   useEffect(() => {
-    if (slug) {
+    if (campaignSlug) {
       fetchCampaignData()
     }
-  }, [slug])
+  }, [campaignSlug])
 
   const fetchCampaignData = async () => {
     try {
       const [campaignRes, updatesRes, donationsRes] = await Promise.all([
-        fetch(`/api/donations/campaigns/${slug}`),
-        fetch(`/api/donations/campaigns/${slug}/updates`),
-        fetch(`/api/donations/campaigns/${slug}/donations?limit=50`)
+        fetch(`/api/donations/campaigns/${campaignSlug}`),
+        fetch(`/api/donations/campaigns/${campaignSlug}/updates`),
+        fetch(`/api/donations/campaigns/${campaignSlug}/donations?limit=50`)
       ])
 
       if (campaignRes.ok) {
