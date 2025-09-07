@@ -383,8 +383,8 @@ const CustomThemeEditor: React.FC<CustomThemeEditorProps> = ({
                     <div className="flex space-x-2">
                       <Select
                         value={gradient.type}
-                        onValueChange={(value: 'linear' | 'radial' | 'conic') =>
-                          updateGradient(key as keyof Theme['gradients'], { type: value })
+                        onValueChange={(value) =>
+                          updateGradient(key as keyof Theme['gradients'], { type: value as 'linear' | 'radial' | 'conic' })
                         }
                       >
                         <SelectTrigger className="w-24">
