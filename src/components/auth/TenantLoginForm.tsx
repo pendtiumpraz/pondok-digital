@@ -253,10 +253,10 @@ export default function TenantLoginForm({ redirectTo, className }: TenantLoginFo
             <Building className="w-4 h-4 text-blue-600" />
             <div>
               <span className="font-medium text-blue-900 dark:text-blue-100">
-                {tenant.name}
+                {tenant?.name || 'Unknown Tenant'}
               </span>
               <Badge variant="secondary" className="ml-2">
-                {tenant.prefix}
+                {tenant?.prefix || 'N/A'}
               </Badge>
             </div>
           </div>
