@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -293,9 +292,7 @@ const TenantBillingPage = () => {
         <div className="space-y-8">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
               className="grid lg:grid-cols-3 gap-8"
             >
               {/* Usage Summary Cards */}
@@ -406,14 +403,12 @@ const TenantBillingPage = () => {
                   </Button>
                 </Card>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Plans Tab */}
           {activeTab === 'plans' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
             >
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Choose Your Plan</h2>
@@ -466,14 +461,12 @@ const TenantBillingPage = () => {
                   </Card>
                 ))}
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Payment Method Tab */}
           {activeTab === 'payment' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
               className="max-w-2xl"
             >
               <div className="mb-6">
@@ -555,14 +548,12 @@ const TenantBillingPage = () => {
                   </Button>
                 </div>
               </Card>
-            </motion.div>
+            </div>
           )}
 
           {/* Invoices Tab */}
           {activeTab === 'invoices' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
             >
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Invoices & Billing History</h2>
@@ -610,14 +601,12 @@ const TenantBillingPage = () => {
                   </table>
                 </div>
               </Card>
-            </motion.div>
+            </div>
           )}
 
           {/* Usage & Limits Tab */}
           {activeTab === 'usage' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
             >
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Usage & Limits</h2>
@@ -690,14 +679,12 @@ const TenantBillingPage = () => {
                   </Card>
                 ))}
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Billing Address Tab */}
           {activeTab === 'billing-address' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
               className="max-w-2xl"
             >
               <div className="mb-6">
@@ -782,7 +769,7 @@ const TenantBillingPage = () => {
                   </Button>
                 </div>
               </Card>
-            </motion.div>
+            </div>
           )}
         </div>
       </div>

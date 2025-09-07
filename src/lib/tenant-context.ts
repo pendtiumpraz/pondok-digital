@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient, Prisma } from '@prisma/client'
-import { headers } from 'next/headers'
 import { cache } from 'react'
 import { getTenantBySubdomain, getTenantByDomain, TenantInfo } from './tenant-auth'
 import prisma from './prisma'
@@ -208,10 +207,12 @@ function mapTenantInfoToContext(tenantInfo: TenantInfo): TenantContext {
 
 /**
  * Server-side function to get current tenant in RSC (React Server Components)
- * Uses headers() to access request context
+ * Uses dynamic import to access headers only when in server context
  */
 export const getCurrentTenantSSR = cache(async (): Promise<TenantContext | null> => {
   try {
+    // Dynamic import to avoid client-side issues
+    const { headers } = await import('next/headers')
     const headersList = headers()
     const host = headersList.get('host') || headersList.get('x-forwarded-host') || ''
     const tenantId = headersList.get('x-tenant-id')
