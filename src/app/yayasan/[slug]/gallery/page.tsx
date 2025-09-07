@@ -12,7 +12,6 @@ import {
   ChevronRight,
   Grid3x3,
   X,
-  Menu,
   Search,
   Share2,
   Copy
@@ -45,7 +44,6 @@ export default function GalleryPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   useEffect(() => {
@@ -87,17 +85,6 @@ export default function GalleryPage() {
     }
   }
 
-  const navigationItems = [
-    { id: 'home', label: 'Beranda', href: '/' },
-    { id: 'about', label: 'Tentang', href: '/about/yayasan' },
-    { id: 'pondok', label: 'Pondok', href: '/about/pondok' },
-    { id: 'tk', label: 'TK', href: '/about/tk' },
-    { id: 'sd', label: 'SD', href: '/about/sd' },
-    { id: 'donasi', label: 'Donasi', href: '/donasi' },
-    { id: 'kegiatan', label: 'Kegiatan', href: '/gallery' },
-    { id: 'kajian', label: 'Kajian', href: '/kajian' },
-    { id: 'perpustakaan', label: 'Perpustakaan', href: '/library' },
-  ]
 
   const categories = [
     { value: 'all', label: 'Semua', color: 'bg-gray-100 text-gray-800' },
@@ -146,76 +133,9 @@ export default function GalleryPage() {
 
   return (
     <>
-      {/* Navigation */}
-      <nav className="fixed top-0 z-50 w-full bg-white/95 backdrop-blur-md shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/">
-                <h1 className="text-xl font-bold text-green-800 cursor-pointer">
-                  Pondok Imam Syafi'i
-                </h1>
-              </Link>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className={`text-sm font-medium transition-colors ${
-                    item.id === 'kegiatan'
-                      ? 'text-green-600' 
-                      : 'text-gray-700 hover:text-green-600'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <Link href="/auth/signin">
-                <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                  Login
-                </Button>
-              </Link>
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X /> : <Menu />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <Link href="/auth/signin" className="block px-3 py-2">
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                  Login
-                </Button>
-              </Link>
-            </div>
-          </div>
-        )}
-      </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-blue-600 to-indigo-700 text-white pt-16">
+      <section className="relative bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <motion.div
@@ -239,7 +159,7 @@ export default function GalleryPage() {
       </section>
 
       {/* Filters and Search */}
-      <section className="py-8 bg-white shadow-sm sticky top-16 z-40">
+      <section className="py-8 bg-white shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="flex items-center gap-4 w-full md:w-auto">
