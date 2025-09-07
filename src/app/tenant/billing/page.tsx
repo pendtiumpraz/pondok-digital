@@ -206,7 +206,7 @@ const TenantBillingPage = () => {
       pending: 'warning',
       failed: 'destructive',
     };
-    return <Badge variant={variants[status] as any}>{status.toUpperCase()}</Badge>;
+    return variants[status];
   };
 
   const formatCurrency = (amount: number) => {
@@ -589,7 +589,9 @@ const TenantBillingPage = () => {
                           <td className="py-4 px-2 text-gray-700">{formatDate(invoice.date)}</td>
                           <td className="py-4 px-2 text-gray-700">{invoice.description}</td>
                           <td className="py-4 px-2 font-semibold">{formatCurrency(invoice.amount)}</td>
-                          <td className="py-4 px-2">{getInvoiceStatusBadge(invoice.status)}</td>
+                          <td className="py-4 px-2">
+                            <Badge variant={getInvoiceStatusBadge(invoice.status) as any}>{invoice.status.toUpperCase()}</Badge>
+                          </td>
                           <td className="py-4 px-2">
                             <div className="flex items-center gap-2">
                               <Button size="sm" variant="outline">
