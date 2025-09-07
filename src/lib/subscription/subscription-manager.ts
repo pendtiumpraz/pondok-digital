@@ -77,9 +77,7 @@ export class SubscriptionManager {
           paymentMethod: params.paymentMethod,
           discountPercent: params.discountPercent,
           discountEndDate: params.discountEndDate,
-          nextBillingDate: params.tier !== SubscriptionTier.TRIAL ? endDate : undefined,
-          features: plan.features,
-          limits: plan.limits
+          nextBillingDate: params.tier !== SubscriptionTier.TRIAL ? endDate : undefined
         }
       })
 
@@ -166,8 +164,6 @@ export class SubscriptionManager {
           tier: params.newTier,
           billingCycle: params.newBillingCycle || subscription.billingCycle,
           price: newPlan.price,
-          features: newPlan.features,
-          limits: newPlan.limits,
           ...(params.prorationOption === 'IMMEDIATE' && {
             currentPeriodStart: effectiveDate,
             currentPeriodEnd: newEndDate,
@@ -496,12 +492,13 @@ export class SubscriptionManager {
    */
   private static async createBillingEvent(event: Omit<BillingEvent, 'id' | 'createdAt'>): Promise<void> {
     try {
-      await prisma.billingEvent?.create({
-        data: {
-          ...event,
-          createdAt: new Date()
-        }
-      })
+      // TODO: Add BillingEvent model to Prisma schema
+      // await prisma.billingEvent?.create({
+      //   data: {
+      //     ...event,
+      //     createdAt: new Date()
+      //   }
+      // })
     } catch (error) {
       console.error('Failed to create billing event:', error)
     }
@@ -543,9 +540,9 @@ export class SubscriptionManager {
             title: 'Berlangganan Telah Berakhir',
             message: `Berlangganan Anda telah berakhir. Anda memiliki masa tenggang hingga ${gracePeriodEndDate.toLocaleDateString('id-ID')} untuk memperpanjang.`,
             type: 'BILLING_ALERT',
-            data: {
+            data: JSON.stringify({
               gracePeriodEndDate: gracePeriodEndDate.toISOString()
-            }
+            })
           }
         })
       }

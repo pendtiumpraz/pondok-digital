@@ -13,9 +13,10 @@ export interface TenantInfo {
   name: string
   slug: string
   prefix: string
-  domain?: string
-  subdomain?: string
+  domain?: string | null
+  subdomain?: string | null
   isActive: boolean
+  settings?: any
   createdAt: Date
   updatedAt: Date
 }

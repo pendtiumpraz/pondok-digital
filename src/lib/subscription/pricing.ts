@@ -273,7 +273,13 @@ export class PricingService {
    */
   static hasFeature(tier: SubscriptionTier, feature: keyof SubscriptionFeatures): boolean {
     const plan = this.getPlan(tier)
-    return plan ? plan.features[feature] : false
+    if (!plan) return false
+    const featureValue = plan.features[feature]
+    // If it's a boolean, return it directly
+    if (typeof featureValue === 'boolean') return featureValue
+    // If it's an array, check if it has items
+    if (Array.isArray(featureValue)) return featureValue.length > 0
+    return false
   }
 
   /**

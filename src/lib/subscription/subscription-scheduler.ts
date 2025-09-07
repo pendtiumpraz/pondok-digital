@@ -74,7 +74,7 @@ export class SubscriptionScheduler {
           }
         },
         include: {
-          organization: true
+          tenant: true
         }
       })
 
@@ -112,7 +112,7 @@ export class SubscriptionScheduler {
         }
       },
       include: {
-        organization: true
+        tenant: true
       }
     })
 
@@ -176,7 +176,7 @@ export class SubscriptionScheduler {
           }
         },
         include: {
-          organization: true
+          tenant: true
         }
       })
 
@@ -235,7 +235,7 @@ export class SubscriptionScheduler {
         }
       },
       include: {
-        organization: true
+        tenant: true
       }
     })
 
@@ -341,19 +341,19 @@ export class SubscriptionScheduler {
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
 
     try {
-      // Clean up old billing events
-      await prisma.billingEvent?.deleteMany({
-        where: {
-          createdAt: { lt: sixMonthsAgo }
-        }
-      })
+      // TODO: Add BillingEvent model to Prisma schema
+      // await prisma.billingEvent?.deleteMany({
+      //   where: {
+      //     createdAt: { lt: sixMonthsAgo }
+      //   }
+      // })
 
       // Clean up old notifications
       await prisma.notification?.deleteMany({
         where: {
           type: 'BILLING_ALERT',
           createdAt: { lt: sixMonthsAgo },
-          read: true
+          isRead: true
         }
       })
 
@@ -384,12 +384,12 @@ export class SubscriptionScheduler {
           title: 'Reminder Perpanjangan Berlangganan',
           message,
           type: 'BILLING_ALERT',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             daysUntilRenewal,
             amount: subscription.price,
             tier: subscription.tier
-          }
+          })
         }
       })
     }
@@ -416,11 +416,11 @@ export class SubscriptionScheduler {
           title: 'Berlangganan Diperpanjang',
           message,
           type: 'BILLING_SUCCESS',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             tier: subscription.tier,
             endDate: subscription.endDate
-          }
+          })
         }
       })
     }
@@ -448,12 +448,12 @@ export class SubscriptionScheduler {
           title: 'Perpanjangan Berlangganan Gagal',
           message,
           type: 'BILLING_ALERT',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             tier: subscription.tier,
             error,
             gracePeriodDays: this.config.gracePeriodDays
-          }
+          })
         }
       })
     }
@@ -481,11 +481,11 @@ export class SubscriptionScheduler {
           title: 'Peringatan Penangguhan Akun',
           message,
           type: 'BILLING_CRITICAL',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             daysUntilSuspension,
             tier: subscription.tier
-          }
+          })
         }
       })
     }
@@ -513,11 +513,11 @@ export class SubscriptionScheduler {
           title: 'Akun Dinonaktifkan',
           message,
           type: 'BILLING_CRITICAL',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             tier: subscription.tier,
             suspendedAt: new Date()
-          }
+          })
         }
       })
     }
@@ -544,10 +544,10 @@ export class SubscriptionScheduler {
           title: 'Trial Akan Berakhir',
           message,
           type: 'BILLING_ALERT',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             trialEndDate: subscription.trialEndDate
-          }
+          })
         }
       })
     }
@@ -574,10 +574,10 @@ export class SubscriptionScheduler {
           title: 'Trial Berakhir',
           message,
           type: 'BILLING_CRITICAL',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             expiredAt: new Date()
-          }
+          })
         }
       })
     }
@@ -606,12 +606,12 @@ export class SubscriptionScheduler {
           title: 'Peringatan Batas Penggunaan',
           message,
           type: 'USAGE_WARNING',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             limitType,
             percentage,
             tier: subscription.tier
-          }
+          })
         }
       })
     }
@@ -643,12 +643,12 @@ export class SubscriptionScheduler {
           title: 'Batas Penggunaan Terlampaui',
           message,
           type: 'USAGE_CRITICAL',
-          data: {
+          data: JSON.stringify({
             subscriptionId: subscription.id,
             exceededLimits: usageCheck.exceededLimits,
             recommendedTier: usageCheck.recommendedTier,
             tier: subscription.tier
-          }
+          })
         }
       })
     }

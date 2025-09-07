@@ -85,13 +85,13 @@ export default function TenantLoginForm({ redirectTo, className }: TenantLoginFo
         }
 
         if (tenant) {
-          setDetectedTenant(tenant)
-          setSelectedTenant(tenant)
+          setDetectedTenant(tenant as Tenant)
+          setSelectedTenant(tenant as Tenant)
           console.log('Detected tenant:', tenant.name)
         } else {
           // No tenant detected, load all available tenants for selection
           const tenants = await getAllTenants()
-          setAvailableTenants(tenants)
+          setAvailableTenants(tenants as Tenant[])
           if (tenants.length > 0) {
             setShowTenantSelection(true)
           }
@@ -101,7 +101,7 @@ export default function TenantLoginForm({ redirectTo, className }: TenantLoginFo
         // Fallback to tenant selection
         try {
           const tenants = await getAllTenants()
-          setAvailableTenants(tenants)
+          setAvailableTenants(tenants as Tenant[])
           setShowTenantSelection(true)
         } catch (fallbackError) {
           console.error('Error loading tenants:', fallbackError)
