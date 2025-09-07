@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import CountUp from 'react-countup';
-import PublicLayout from '@/components/layout/PublicLayout';
+import SaasHeader from '@/components/layout/SaasHeader';
+import SaasFooter from '@/components/layout/SaasFooter';
 import {
   CloudIcon,
   CogIcon,
@@ -122,7 +123,8 @@ export default function HomePage() {
   ];
 
   return (
-    <PublicLayout>
+    <div className="min-h-screen flex flex-col">
+      <SaasHeader />
       {/* Hero Section */}
       <motion.section
         initial="hidden"
@@ -548,6 +550,7 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
-    </PublicLayout>
+      <SaasFooter />
+    </div>
   );
 }
