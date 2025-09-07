@@ -30,6 +30,33 @@ export default function HomePage() {
     threshold: 0.1,
   });
 
+  // Translations
+  const t = {
+    badge: 'Platform Digital Pesantren Modern',
+    heroTitle: 'Platform Digital untuk',
+    heroHighlight: 'Pesantren Modern',
+    heroSubtitle: 'Kelola pesantren, sekolah Islam, dan yayasan Anda dengan sistem terintegrasi yang mudah digunakan',
+    heroDescription: 'Transformasi digital pesantren Anda dengan platform all-in-one yang mengelola akademik, keuangan, SDM, dan operasional dalam satu sistem terintegrasi.',
+    startTrial: 'Mulai Uji Coba Gratis',
+    viewPricing: 'Lihat Harga',
+    noSetupFees: 'Tanpa biaya setup',
+    cancelAnytime: 'Batal kapan saja',
+    support247: 'Support 24/7',
+    featuresTitle: 'Fitur Lengkap',
+    featuresHighlight: 'untuk Pesantren Modern',
+    featuresSubtitle: 'Semua yang Anda butuhkan untuk mengelola pesantren dalam satu platform',
+    benefitsTitle: 'Keuntungan Menggunakan',
+    benefitsHighlight: 'Pondok Digital',
+    benefitsSubtitle: 'Platform terpadu yang dirancang khusus untuk kebutuhan pesantren Indonesia',
+    trustedTitle: 'Dipercaya oleh Pesantren Terkemuka',
+    trustedSubtitle: 'Bergabung dengan ratusan pesantren yang telah bertransformasi digital',
+    reviews: 'ulasan',
+    readyTitle: 'Siap Modernisasi Pesantren Anda?',
+    readySubtitle: 'Bergabung dengan ratusan pesantren yang telah meningkatkan efisiensi operasional hingga 80%',
+    scheduleDemo: 'Jadwalkan Demo',
+    noCredit: 'Tidak perlu kartu kredit • Setup instan • Cancel kapan saja'
+  };
+
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -47,52 +74,52 @@ export default function HomePage() {
     {
       icon: CloudIcon,
       title: 'Multi-Tenant SaaS',
-      description: 'Complete tenant isolation with custom branding and domains for each organization',
+      description: 'Isolasi lengkap untuk setiap yayasan dengan branding dan domain khusus',
       color: 'from-blue-400 to-indigo-600',
-      href: '/features/multi-tenant',
+      href: '/features',
     },
     {
       icon: ChartBarIcon,
-      title: 'Advanced Analytics',
-      description: 'Real-time dashboards with detailed insights and customizable reporting',
+      title: 'Analitik Canggih',
+      description: 'Dashboard real-time dengan insight mendalam dan laporan yang dapat disesuaikan',
       color: 'from-emerald-400 to-green-600',
-      href: '/features/analytics',
+      href: '/features',
     },
     {
       icon: CogIcon,
-      title: 'Flexible Configuration',
-      description: 'Extensive customization options to adapt the platform to your specific needs',
+      title: 'Konfigurasi Fleksibel',
+      description: 'Opsi kustomisasi ekstensif untuk menyesuaikan platform dengan kebutuhan Anda',
       color: 'from-purple-400 to-pink-600',
-      href: '/features/configuration',
+      href: '/features',
     },
     {
       icon: ShieldCheckIcon,
-      title: 'Enterprise Security',
-      description: 'Bank-grade security with SOC2 compliance and advanced threat protection',
+      title: 'Keamanan Enterprise',
+      description: 'Keamanan tingkat bank dengan enkripsi data dan proteksi berlapis',
       color: 'from-orange-400 to-red-600',
-      href: '/features/security',
+      href: '/features',
     },
     {
       icon: GlobeAltIcon,
-      title: 'Global Scale',
-      description: 'Deploy anywhere with multi-region support and 99.9% uptime guarantee',
+      title: 'Skala Global',
+      description: 'Deploy dimana saja dengan dukungan multi-region dan jaminan uptime 99.9%',
       color: 'from-teal-400 to-cyan-600',
-      href: '/features/scale',
+      href: '/features',
     },
     {
       icon: UsersIcon,
-      title: 'Team Collaboration',
-      description: 'Advanced user management with role-based permissions and team workflows',
+      title: 'Kolaborasi Tim',
+      description: 'Manajemen pengguna canggih dengan izin berbasis peran dan workflow tim',
       color: 'from-yellow-400 to-amber-600',
-      href: '/features/collaboration',
+      href: '/features',
     },
   ];
 
   const stats = [
-    { label: 'Active Tenants', value: 2500, icon: BuildingOfficeIcon },
-    { label: 'Monthly Users', value: 150000, icon: UsersIcon },
+    { label: 'Yayasan Aktif', value: 100, suffix: '+', icon: BuildingOfficeIcon },
+    { label: 'Pengguna Bulanan', value: 15000, suffix: '+', icon: UsersIcon },
     { label: 'Uptime', value: 99.9, suffix: '%', icon: ShieldCheckIcon },
-    { label: 'Countries', value: 45, suffix: '+', icon: GlobeAltIcon },
+    { label: 'Provinsi', value: 20, suffix: '+', icon: GlobeAltIcon },
   ];
 
   const benefits = [
@@ -390,7 +417,7 @@ export default function HomePage() {
                     </p>
                     
                     <div className="flex items-center text-indigo-600 font-medium group-hover:translate-x-2 transition-transform">
-                      <span>{language === 'id' ? 'Pelajari lebih lanjut' : 'Learn more'}</span>
+                      <span>Pelajari lebih lanjut</span>
                       <ArrowRightIcon className="w-4 h-4 ml-2" />
                     </div>
                   </div>
