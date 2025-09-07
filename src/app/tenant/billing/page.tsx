@@ -267,7 +267,7 @@ const TenantBillingPage = () => {
               <div className="text-gray-600">Next billing: Oct 1</div>
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* Tabs */}
         <div className="mb-8">

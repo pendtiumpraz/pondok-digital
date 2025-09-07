@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, createContext, useContext, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 
 export interface ClientTenantInfo {
@@ -167,7 +167,7 @@ export function useTenantAccess() {
 export function useTenantBranding() {
   const { tenant, loading, error } = useTenant()
 
-  const getBrandingValue = <T>(key: string, defaultValue: T): T => {
+  const getBrandingValue = <T,>(key: string, defaultValue: T): T => {
     if (!tenant?.settings?.branding) {
       return defaultValue
     }
@@ -228,7 +228,6 @@ export function useTenantFeatures() {
 /**
  * Context provider component for tenant information
  */
-import { createContext, useContext, ReactNode } from 'react'
 
 const TenantContext = createContext<TenantHookState | null>(null)
 
