@@ -12,7 +12,7 @@ export default function SaasHeader() {
     { label: 'Beranda', href: '/' },
     { label: 'Fitur', href: '#features' },
     { label: 'Harga', href: '/pricing' },
-    { label: 'Demo', href: '/yayasan/imam-syafii' },
+    { label: 'Demo', href: '/yayasan/imam-syafii', target: '_blank' },
     { label: 'Kontak', href: '#contact' },
   ]
 
@@ -34,6 +34,8 @@ export default function SaasHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                target={item.target}
+                rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
                 className="text-gray-600 hover:text-green-600 transition-colors"
               >
                 {item.label}
@@ -71,6 +73,8 @@ export default function SaasHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                target={item.target}
+                rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
                 className="block py-2 text-gray-600 hover:text-green-600"
                 onClick={() => setMobileMenuOpen(false)}
               >

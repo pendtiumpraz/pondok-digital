@@ -182,7 +182,7 @@ export default function SAASLanding() {
           <div className="text-center">
             <p className="mb-6">Coba demo dari salah satu yayasan kami:</p>
             <Button asChild>
-              <Link href="/yayasan/imam-syafii">
+              <Link href="/yayasan/imam-syafii" target="_blank" rel="noopener noreferrer">
                 Demo: Yayasan Pondok Imam Syafii Blitar
               </Link>
             </Button>

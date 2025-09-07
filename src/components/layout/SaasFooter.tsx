@@ -35,7 +35,7 @@ export default function SaasFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/yayasan/imam-syafii" className="hover:text-white">
+                <Link href="/yayasan/imam-syafii" target="_blank" rel="noopener noreferrer" className="hover:text-white">
                   Demo
                 </Link>
               </li>
