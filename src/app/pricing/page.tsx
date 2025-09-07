@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import PublicLayout from '@/components/layout/PublicLayout';
+import SaasHeader from '@/components/layout/SaasHeader';
+import SaasFooter from '@/components/layout/SaasFooter';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -187,7 +188,8 @@ const PricingPage = () => {
   };
 
   return (
-    <PublicLayout>
+    <div className="min-h-screen flex flex-col">
+      <SaasHeader />
       <div className="min-h-screen">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
@@ -632,7 +634,8 @@ const PricingPage = () => {
           </div>
         </section>
       </div>
-    </PublicLayout>
+      <SaasFooter />
+    </div>
   );
 };
 
