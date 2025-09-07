@@ -38,6 +38,19 @@ export interface PaymentNotification {
   fraud_status?: string
   approval_code?: string
   currency?: string
+  eci?: string
+  channel_response_message?: string
+  channel_response_code?: string
+  card_type?: string
+  bank?: string
+  va_numbers?: Array<{
+    bank: string
+    va_number: string
+  }>
+  biller_code?: string
+  bill_key?: string
+  permata_va_number?: string
+  bca_va_number?: string
 }
 
 export interface PricingPlan {
