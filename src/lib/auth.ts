@@ -2,6 +2,14 @@ import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import prisma from './prisma'
+import { 
+  findUserWithTenant, 
+  detectTenantFromRequest, 
+  getTenantBySubdomain, 
+  getTenantByDomain,
+  isSuperAdmin,
+  parsePrefixedUsername
+} from './tenant-auth'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -9,12 +17,16 @@ export const authOptions: NextAuthOptions = {
       name: 'credentials',
       credentials: {
         username: { label: 'Username', type: 'text' },
-        password: { label: 'Password', type: 'password' }
+        password: { label: 'Password', type: 'password' },
+        tenantId: { label: 'Tenant ID', type: 'text' },
+        host: { label: 'Host', type: 'text' }
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         console.log('🔐 Authorize called with:', { 
           username: credentials?.username,
-          hasPassword: !!credentials?.password 
+          hasPassword: !!credentials?.password,
+          tenantId: credentials?.tenantId,
+          host: credentials?.host
         })
 
         if (!credentials?.username || !credentials?.password) {
@@ -23,17 +35,43 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          console.log('🔍 Looking for user:', credentials.username)
-          const user = await prisma.user.findUnique({
-            where: {
-              username: credentials.username
+          // Detect tenant from request or credentials
+          let detectedTenant = null
+          
+          // Try to detect tenant from host/subdomain first
+          if (credentials.host || req?.headers?.host) {
+            const hostToUse = credentials.host || req?.headers?.host || ''
+            const { subdomain, domain } = detectTenantFromRequest({
+              headers: { host: hostToUse }
+            })
+            
+            if (subdomain) {
+              detectedTenant = await getTenantBySubdomain(subdomain)
+              console.log('🏢 Detected tenant from subdomain:', { subdomain, tenant: detectedTenant?.name })
+            } else if (domain) {
+              detectedTenant = await getTenantByDomain(domain)
+              console.log('🏢 Detected tenant from domain:', { domain, tenant: detectedTenant?.name })
             }
+          }
+          
+          // Use provided tenantId if available
+          const tenantId = credentials.tenantId || detectedTenant?.id
+          
+          console.log('🔍 Looking for user with tenant context:', {
+            username: credentials.username,
+            tenantId,
+            detectedTenant: detectedTenant?.name
           })
-
-          if (!user) {
+          
+          // Use tenant-aware user lookup
+          const userResult = await findUserWithTenant(credentials.username, tenantId)
+          
+          if (!userResult.user) {
             console.log('❌ User not found:', credentials.username)
             return null
           }
+          
+          const { user, tenant, isPrefixed, originalUsername } = userResult
 
           if (!user.isActive) {
             console.log('❌ User not active:', credentials.username)
@@ -43,7 +81,10 @@ export const authOptions: NextAuthOptions = {
           console.log('✅ User found:', { 
             id: user.id, 
             username: user.username, 
-            isActive: user.isActive 
+            isActive: user.isActive,
+            tenant: tenant?.name,
+            isPrefixed,
+            originalUsername
           })
 
           console.log('🔑 Comparing passwords...')
@@ -70,6 +111,9 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             isUstadz: user.isUstadz,
             requires2FA,
+            tenantId: tenant?.id,
+            tenantPrefix: tenant?.prefix,
+            tenantName: tenant?.name,
           }
         } catch (error) {
           console.error('❌ Auth error:', error)
@@ -90,6 +134,9 @@ export const authOptions: NextAuthOptions = {
           token.username = user.username
           token.isUstadz = user.isUstadz
           token.requires2FA = user.requires2FA
+          token.tenantId = user.tenantId
+          token.tenantPrefix = user.tenantPrefix
+          token.tenantName = user.tenantName
         }
         return token
       } catch (error) {
@@ -105,6 +152,9 @@ export const authOptions: NextAuthOptions = {
           session.user.username = token.username as string
           session.user.isUstadz = token.isUstadz as boolean
           session.user.requires2FA = token.requires2FA as boolean
+          session.user.tenantId = token.tenantId as string
+          session.user.tenantPrefix = token.tenantPrefix as string
+          session.user.tenantName = token.tenantName as string
         }
         
         // Ensure session always has a valid structure

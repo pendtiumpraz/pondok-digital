@@ -9,6 +9,9 @@ declare module 'next-auth' {
     role: string
     isUstadz: boolean
     requires2FA?: boolean
+    tenantId?: string
+    tenantPrefix?: string
+    tenantName?: string
   }
 
   interface Session {
@@ -18,6 +21,9 @@ declare module 'next-auth' {
       role?: string
       isUstadz?: boolean
       requires2FA?: boolean
+      tenantId?: string
+      tenantPrefix?: string
+      tenantName?: string
     } & DefaultSession['user']
   }
 }
@@ -28,5 +34,8 @@ declare module 'next-auth/jwt' {
     username?: string
     isUstadz?: boolean
     requires2FA?: boolean
+    tenantId?: string
+    tenantPrefix?: string
+    tenantName?: string
   }
 }
