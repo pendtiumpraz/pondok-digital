@@ -5,6 +5,6 @@ export default function TenantPage({
 }: {
   params: { slug: string }
 }) {
-  // Redirect to tenant dashboard
-  redirect(`/tenants/${params.slug}/dashboard`)
+  // Redirect to yayasan dashboard
+  redirect(`/yayasan/${params.slug}/dashboard`)
 }

@@ -177,13 +177,13 @@ export default function SAASLanding() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Lihat Demo Tenant
+            Lihat Demo Yayasan
           </h2>
           <div className="text-center">
-            <p className="mb-6">Coba demo dari salah satu tenant kami:</p>
+            <p className="mb-6">Coba demo dari salah satu yayasan kami:</p>
             <Button asChild>
-              <Link href="/tenants/imam-syafii">
-                Demo: Pondok Imam Syafii Blitar
+              <Link href="/yayasan/imam-syafii">
+                Demo: Yayasan Pondok Imam Syafii Blitar
               </Link>
             </Button>
           </div>

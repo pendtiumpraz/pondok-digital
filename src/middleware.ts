@@ -21,17 +21,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Check if it's a tenant route
-  if (pathname.startsWith('/tenants/')) {
-    // Extract tenant slug from URL
+  // Check if it's a yayasan route
+  if (pathname.startsWith('/yayasan/')) {
+    // Extract yayasan slug from URL
     const parts = pathname.split('/')
-    const tenantSlug = parts[2] // /tenants/[slug]/...
+    const yayasanSlug = parts[2] // /yayasan/[slug]/...
     
-    if (tenantSlug) {
+    if (yayasanSlug) {
       const response = NextResponse.next()
       
-      // Add tenant info to headers for downstream use
-      response.headers.set('x-tenant-slug', tenantSlug)
+      // Add yayasan info to headers for downstream use
+      response.headers.set('x-yayasan-slug', yayasanSlug)
       
       // Add security headers
       response.headers.set('x-frame-options', 'DENY')
