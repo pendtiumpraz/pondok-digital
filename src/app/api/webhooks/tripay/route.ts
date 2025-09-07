@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { TripayService } from '@/lib/payment/tripay-service';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const callbackSignature = request.headers.get('X-Callback-Signature');

@@ -8,6 +8,8 @@ import {
   handleUnfollowEvent 
 } from '@/lib/line/handlers'
 import { validateSignature } from '@/lib/line/security'
+
+export const dynamic = 'force-dynamic'
 import { LineEvent } from '@/types/line'
 
 // Initialize LINE settings on startup

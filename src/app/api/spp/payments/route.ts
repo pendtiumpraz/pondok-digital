@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
 
+export const dynamic = 'force-dynamic'
+
 // Helper function to generate payment number
 async function generatePaymentNumber(year: number, month: number): Promise<string> {
   const count = await prisma.sPPPayment.count({

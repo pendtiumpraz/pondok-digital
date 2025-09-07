@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth'
 import TwoFactorAuthService from '@/lib/two-factor-auth'
 import prisma from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 // Send SMS OTP
 export async function POST(request: NextRequest) {
   try {

@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { getWhatsAppService } from '@/lib/whatsapp-service';
 import { WHATSAPP_TEMPLATES } from '@/lib/whatsapp-templates';
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

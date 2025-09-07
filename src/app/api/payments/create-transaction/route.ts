@@ -11,6 +11,8 @@ import {
 } from '@/lib/payment-security'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 // Transaction creation schema
 const CreateTransactionSchema = z.object({
   // Payment source

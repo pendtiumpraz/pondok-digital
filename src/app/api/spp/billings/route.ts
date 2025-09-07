@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { Decimal } from '@prisma/client/runtime/library';
 
+export const dynamic = 'force-dynamic'
+
 // Helper function to generate billing number
 async function generateBillingNumber(year: number, month: number): Promise<string> {
   const count = await prisma.sPPBilling.count({

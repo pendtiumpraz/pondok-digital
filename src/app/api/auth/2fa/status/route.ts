@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import TwoFactorAuthService from '@/lib/two-factor-auth'
 
+export const dynamic = 'force-dynamic'
+
 // Get 2FA status for current user
 export async function GET(request: NextRequest) {
   try {

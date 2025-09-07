@@ -3,6 +3,8 @@ import { PaymentGateway } from '@/lib/payment-gateway'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 interface RouteParams {
   params: {
     id: string

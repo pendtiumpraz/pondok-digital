@@ -10,6 +10,8 @@ import {
 } from '@/lib/payment-security'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 // Midtrans notification schema
 const NotificationSchema = z.object({
   transaction_time: z.string(),

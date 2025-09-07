@@ -5,6 +5,8 @@ import TwoFactorAuthService from '@/lib/two-factor-auth'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 
+export const dynamic = 'force-dynamic'
+
 // Generate new backup codes
 export async function POST(request: NextRequest) {
   try {
