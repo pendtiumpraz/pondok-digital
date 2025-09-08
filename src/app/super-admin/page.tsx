@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -25,6 +27,7 @@ import {
   BellIcon,
   Cog6ToothIcon,
   ShieldCheckIcon,
+  ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
 interface Tenant {
@@ -46,12 +49,17 @@ interface Tenant {
 }
 
 const SuperAdminDashboard = () => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterPlan, setFilterPlan] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'name' | 'revenue' | 'users' | 'created'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+
+  const handleLogout = async () => {
+    await signOut({ redirect: true, callbackUrl: '/auth/admin-signin' });
+  };
 
   // Mock data - in real app this would come from API
   const [tenants] = useState<Tenant[]>([
@@ -62,7 +70,7 @@ const SuperAdminDashboard = () => {
       plan: 'enterprise',
       status: 'active',
       users: 150,
-      revenue: 199 * 12,
+      revenue: 1999000 * 12,
       createdAt: '2024-01-15',
       lastActive: '2024-09-07',
       adminEmail: 'admin@techcorp.com',
@@ -75,7 +83,7 @@ const SuperAdminDashboard = () => {
       plan: 'pro',
       status: 'active',
       users: 25,
-      revenue: 79 * 12,
+      revenue: 799000 * 12,
       createdAt: '2024-03-20',
       lastActive: '2024-09-06',
       adminEmail: 'founder@startupxyz.com',
@@ -101,7 +109,7 @@ const SuperAdminDashboard = () => {
       plan: 'enterprise',
       status: 'active',
       users: 500,
-      revenue: 199 * 12,
+      revenue: 1999000 * 12,
       createdAt: '2023-11-10',
       lastActive: '2024-09-07',
       adminEmail: 'it@enterprise.com',
@@ -114,7 +122,7 @@ const SuperAdminDashboard = () => {
       plan: 'pro',
       status: 'suspended',
       users: 15,
-      revenue: 79 * 8, // 8 months active
+      revenue: 799000 * 8, // 8 months active
       createdAt: '2024-01-05',
       lastActive: '2024-08-15',
       adminEmail: 'hello@creative.com',
@@ -223,7 +231,7 @@ const SuperAdminDashboard = () => {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
   };
 
   const formatNumber = (num: number) => {
@@ -258,6 +266,14 @@ const SuperAdminDashboard = () => {
               <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center gap-2">
                 <PlusIcon className="w-4 h-4" />
                 Add Tenant
+              </Button>
+              <Button 
+                onClick={handleLogout}
+                variant="destructive" 
+                className="flex items-center gap-2"
+              >
+                <ArrowRightOnRectangleIcon className="w-4 h-4" />
+                Logout
               </Button>
             </div>
           </div>

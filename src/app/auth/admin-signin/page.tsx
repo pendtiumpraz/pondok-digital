@@ -34,8 +34,19 @@ export default function AdminSignInPage() {
       if (result?.error) {
         setError('Username atau password salah')
       } else {
-        // Redirect to admin dashboard
-        router.push('/super-admin')
+        // Check if we have user session to determine redirect
+        const response = await fetch('/api/auth/session')
+        const session = await response.json()
+        
+        if (session?.user?.role === 'SUPER_ADMIN') {
+          router.push('/super-admin')
+        } else if (session?.user?.role === 'ADMIN') {
+          // Admin should go to their yayasan dashboard
+          router.push('/yayasan/imam-syafii/dashboard')
+        } else {
+          // Staff or other roles go to default dashboard
+          router.push('/dashboard')
+        }
       }
     } catch (error) {
       setError('Terjadi kesalahan. Silakan coba lagi.')
