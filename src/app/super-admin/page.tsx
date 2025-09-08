@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -24,10 +22,6 @@ import {
   ArrowUpIcon,
   ArrowDownIcon,
   CalendarIcon,
-  BellIcon,
-  Cog6ToothIcon,
-  ShieldCheckIcon,
-  ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
 interface Tenant {
@@ -49,7 +43,6 @@ interface Tenant {
 }
 
 const SuperAdminDashboard = () => {
-  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterPlan, setFilterPlan] = useState<string>('all');
@@ -59,10 +52,6 @@ const SuperAdminDashboard = () => {
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
-
-  const handleLogout = async () => {
-    await signOut({ redirect: true, callbackUrl: '/auth/admin-signin' });
-  };
 
   // Fetch real data from API
   useEffect(() => {
@@ -306,51 +295,10 @@ const SuperAdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
-                <ShieldCheckIcon className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Super Admin Dashboard</h1>
-                <p className="text-gray-600">Manage all tenants and system operations</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <Button variant="outline" className="flex items-center gap-2">
-                <BellIcon className="w-4 h-4" />
-                Alerts (3)
-              </Button>
-              <Button variant="outline" className="flex items-center gap-2">
-                <Cog6ToothIcon className="w-4 h-4" />
-                Settings
-              </Button>
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center gap-2">
-                <PlusIcon className="w-4 h-4" />
-                Add Tenant
-              </Button>
-              <Button 
-                onClick={handleLogout}
-                variant="destructive" 
-                className="flex items-center gap-2"
-              >
-                <ArrowRightOnRectangleIcon className="w-4 h-4" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-6 py-8">
+    <div className="p-6">
         {/* Stats Cards */}
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 mb-8">
-          {stats.map((stat, index) => (
+          {displayStats.map((stat, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
