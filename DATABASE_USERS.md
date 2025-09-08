@@ -49,21 +49,32 @@ curl -X GET "https://your-domain.com/api/users"
 
 ## Default Users yang Dibuat Sistem
 
-### 1. Admin User
+### 1. Super Admin User
+- **Username**: `superadmin`
+- **Email**: `superadmin@pondokdigital.id`
+- **Password**: `superadmin2024`
+- **Role**: `SUPER_ADMIN`
+- **Status**: Active
+- **Dibuat oleh**: `/api/auth/init` route
+- **Akses**: Full system access, semua tenant/yayasan
+
+### 2. Admin User
 - **Username**: `admin`
 - **Email**: `admin@ponpesimamsyafii.id`
 - **Password**: `admin123`
 - **Role**: `ADMIN`
 - **Status**: Active
 - **Dibuat oleh**: `/api/auth/init` route
+- **Akses**: Full access untuk tenant/yayasan tertentu
 
-### 2. Staff User
+### 3. Staff User
 - **Username**: `staff`
 - **Email**: `staff@ponpesimamsyafii.id`
 - **Password**: `staff123`
 - **Role**: `STAFF`
 - **Status**: Active
 - **Dibuat oleh**: `/api/auth/init` route
+- **Akses**: Operasional terbatas
 
 ## Cara Membuat User Default
 
@@ -77,8 +88,14 @@ curl "https://your-domain.com/api/auth/init?secret=init-secret-2024"
 ```json
 {
   "success": true,
-  "message": "Users created successfully",
+  "message": "Users created/updated successfully",
   "users": [
+    {
+      "username": "superadmin",
+      "email": "superadmin@pondokdigital.id",
+      "role": "SUPER_ADMIN",
+      "password": "superadmin2024"
+    },
     {
       "username": "admin",
       "email": "admin@ponpesimamsyafii.id",
@@ -161,12 +178,17 @@ INIT_SECRET="init-secret-2024"  # Secret untuk API init
 
 ## Testing Login
 
-### 1. Login sebagai Admin
-- **URL**: `/auth/signin`
+### 1. Login sebagai Super Admin
+- **URL**: `/auth/admin-signin` atau `/auth/signin`
+- **Username**: `superadmin`
+- **Password**: `superadmin2024`
+
+### 2. Login sebagai Admin
+- **URL**: `/auth/admin-signin` atau `/auth/signin`
 - **Username**: `admin`
 - **Password**: `admin123`
 
-### 2. Login sebagai Staff
+### 3. Login sebagai Staff
 - **URL**: `/auth/signin` 
 - **Username**: `staff`
 - **Password**: `staff123`

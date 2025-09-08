@@ -21,50 +21,96 @@ export async function GET(request: NextRequest) {
 
     const { default: prisma } = await import('@/lib/prisma');
     
+    // Check if super admin user already exists
+    const existingSuperAdmin = await prisma.user.findUnique({
+      where: { username: 'superadmin' }
+    });
+    
+    // Create or update super admin user
+    const superAdminPassword = await bcrypt.hash('superadmin2024', 10);
+    
+    let superAdminUser;
+    if (!existingSuperAdmin) {
+      superAdminUser = await prisma.user.create({
+        data: {
+          username: 'superadmin',
+          email: 'superadmin@pondokdigital.id',
+          password: superAdminPassword,
+          name: 'Super Administrator',
+          role: 'SUPER_ADMIN',
+          isActive: true
+        }
+      });
+    } else {
+      // Update password if super admin exists
+      superAdminUser = await prisma.user.update({
+        where: { username: 'superadmin' },
+        data: { 
+          password: superAdminPassword,
+          role: 'SUPER_ADMIN',
+          isActive: true 
+        }
+      });
+    }
+    
     // Check if admin user already exists
     const existingAdmin = await prisma.user.findUnique({
       where: { username: 'admin' }
     });
     
-    if (existingAdmin) {
-      return NextResponse.json({
-        message: 'Admin user already exists',
-        username: 'admin'
-      });
-    }
-    
     // Create admin user
     const hashedPassword = await bcrypt.hash('admin123', 10);
     
-    const adminUser = await prisma.user.create({
-      data: {
-        username: 'admin',
-        email: 'admin@ponpesimamsyafii.id',
-        password: hashedPassword,
-        name: 'Administrator',
-        role: 'ADMIN',
-        isActive: true
-      }
+    let adminUser;
+    if (!existingAdmin) {
+      adminUser = await prisma.user.create({
+        data: {
+          username: 'admin',
+          email: 'admin@ponpesimamsyafii.id',
+          password: hashedPassword,
+          name: 'Administrator',
+          role: 'ADMIN',
+          isActive: true
+        }
+      });
+    } else {
+      adminUser = existingAdmin;
+    }
+    
+    // Check if staff user exists
+    const existingStaff = await prisma.user.findUnique({
+      where: { username: 'staff' }
     });
     
-    // Also create a staff user for testing
+    // Create staff user for testing
     const staffPassword = await bcrypt.hash('staff123', 10);
     
-    const staffUser = await prisma.user.create({
-      data: {
-        username: 'staff',
-        email: 'staff@ponpesimamsyafii.id',
-        password: staffPassword,
-        name: 'Staff User',
-        role: 'STAFF',
-        isActive: true
-      }
-    });
+    let staffUser;
+    if (!existingStaff) {
+      staffUser = await prisma.user.create({
+        data: {
+          username: 'staff',
+          email: 'staff@ponpesimamsyafii.id',
+          password: staffPassword,
+          name: 'Staff User',
+          role: 'STAFF',
+          isActive: true
+        }
+      });
+    } else {
+      staffUser = existingStaff;
+    }
     
     return NextResponse.json({
       success: true,
-      message: 'Users created successfully',
+      message: 'Users created/updated successfully',
       users: [
+        {
+          username: superAdminUser.username,
+          email: superAdminUser.email,
+          role: superAdminUser.role,
+          password: 'superadmin2024'
+        },
         {
           username: adminUser.username,
           email: adminUser.email,

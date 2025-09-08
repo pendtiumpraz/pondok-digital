@@ -12,7 +12,7 @@ import { User, AlertCircle } from 'lucide-react'
 export default function YayasanSignInPage() {
   const params = useParams()
   const slug = params.slug as string
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -29,14 +29,14 @@ export default function YayasanSignInPage() {
 
     try {
       const result = await signIn('credentials', {
-        email,
+        username,
         password,
-        tenantSlug: slug, // Pass tenant context
+        tenantId: slug, // Pass tenant context
         redirect: false,
       })
 
       if (result?.error) {
-        setError('Email atau password salah')
+        setError('Username atau password salah')
       } else {
         // Redirect to tenant dashboard based on user role
         router.push(`/yayasan/${slug}/dashboard`)
@@ -70,13 +70,13 @@ export default function YayasanSignInPage() {
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="email">Email / Username</Label>
+                <Label htmlFor="username">Username</Label>
                 <Input
-                  id="email"
+                  id="username"
                   type="text"
-                  placeholder="user@example.com atau username"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Masukkan username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>

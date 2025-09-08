@@ -13,7 +13,7 @@ import SaasHeader from '@/components/layout/SaasHeader'
 import SaasFooter from '@/components/layout/SaasFooter'
 
 export default function AdminSignInPage() {
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -26,13 +26,13 @@ export default function AdminSignInPage() {
 
     try {
       const result = await signIn('credentials', {
-        email,
+        username,
         password,
         redirect: false,
       })
 
       if (result?.error) {
-        setError('Email atau password salah')
+        setError('Username atau password salah')
       } else {
         // Redirect to admin dashboard
         router.push('/super-admin')
@@ -68,13 +68,13 @@ export default function AdminSignInPage() {
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="username">Username</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="admin@yayasan.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="username"
+                  type="text"
+                  placeholder="Masukkan username (admin/superadmin)"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
