@@ -8,8 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { User, AlertCircle } from 'lucide-react'
-import TenantHeader from '@/components/tenant/TenantHeader'
-import TenantFooter from '@/components/tenant/TenantFooter'
 
 export default function YayasanSignInPage() {
   const params = useParams()
@@ -51,10 +49,8 @@ export default function YayasanSignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TenantHeader />
-      <div className="flex-grow flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-green-50 py-12">
-        <Card className="w-full max-w-md">
+    <div className="flex-grow flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-green-50 py-12">
+      <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-white" />
@@ -144,7 +140,5 @@ export default function YayasanSignInPage() {
           </CardContent>
         </Card>
       </div>
-      <TenantFooter />
-    </div>
   )
 }
