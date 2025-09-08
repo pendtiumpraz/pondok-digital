@@ -21,6 +21,41 @@ export async function GET(request: NextRequest) {
 
     const { default: prisma } = await import('@/lib/prisma');
     
+    // First, create or get Imam Syafii tenant
+    let imamSyafiiTenant = await prisma.tenant.findUnique({
+      where: { slug: 'imam-syafii' }
+    });
+    
+    if (!imamSyafiiTenant) {
+      imamSyafiiTenant = await prisma.tenant.create({
+        data: {
+          name: 'Pondok Pesantren Imam Syafii Blitar',
+          slug: 'imam-syafii',
+          prefix: 'IMS',
+          isActive: true,
+          settings: {
+            theme: 'green',
+            locale: 'id',
+            timezone: 'Asia/Jakarta'
+          }
+        }
+      });
+      
+      // Create subscription for the tenant
+      await prisma.subscription.create({
+        data: {
+          organizationId: imamSyafiiTenant.id,
+          tier: 'TRIAL',
+          status: 'ACTIVE',
+          startDate: new Date(),
+          trialEndDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days trial
+          features: ['all'],
+          maxUsers: 50,
+          maxStudents: 100
+        }
+      });
+    }
+    
     // Check if super admin user already exists
     const existingSuperAdmin = await prisma.user.findUnique({
       where: { username: 'superadmin' }
@@ -58,7 +93,7 @@ export async function GET(request: NextRequest) {
       where: { username: 'admin' }
     });
     
-    // Create admin user
+    // Create admin user and link to Imam Syafii tenant
     const hashedPassword = await bcrypt.hash('admin123', 10);
     
     let adminUser;
@@ -68,16 +103,25 @@ export async function GET(request: NextRequest) {
           username: 'admin',
           email: 'admin@ponpesimamsyafii.id',
           password: hashedPassword,
-          name: 'Administrator',
+          name: 'Administrator Imam Syafii',
           role: 'ADMIN',
-          isActive: true
+          isActive: true,
+          tenantId: imamSyafiiTenant.id // Link to Imam Syafii tenant
         }
       });
     } else {
-      adminUser = existingAdmin;
+      // Update existing admin to link to tenant
+      adminUser = await prisma.user.update({
+        where: { username: 'admin' },
+        data: {
+          password: hashedPassword,
+          tenantId: imamSyafiiTenant.id,
+          isActive: true
+        }
+      });
     }
     
-    // Create multiple role users for testing
+    // Create multiple role users for testing - all linked to Imam Syafii tenant
     const users = [
       {
         username: 'ustadz',
@@ -85,7 +129,8 @@ export async function GET(request: NextRequest) {
         password: 'ustadz123',
         name: 'Ustadz Ahmad',
         role: 'TEACHER',
-        isUstadz: true
+        isUstadz: true,
+        tenantId: imamSyafiiTenant.id
       },
       {
         username: 'bendahara',
@@ -93,7 +138,8 @@ export async function GET(request: NextRequest) {
         password: 'bendahara123',
         name: 'Bendahara Pesantren',
         role: 'TREASURER',
-        isUstadz: false
+        isUstadz: false,
+        tenantId: imamSyafiiTenant.id
       },
       {
         username: 'staff',
@@ -101,7 +147,8 @@ export async function GET(request: NextRequest) {
         password: 'staff123',
         name: 'Staff Administrasi',
         role: 'STAFF',
-        isUstadz: false
+        isUstadz: false,
+        tenantId: imamSyafiiTenant.id
       }
     ];
 
@@ -150,7 +197,13 @@ export async function GET(request: NextRequest) {
     
     return NextResponse.json({
       success: true,
-      message: 'Users created/updated successfully',
+      message: 'Users and tenant created/updated successfully',
+      tenant: {
+        name: imamSyafiiTenant.name,
+        slug: imamSyafiiTenant.slug,
+        prefix: imamSyafiiTenant.prefix,
+        path: `/yayasan/${imamSyafiiTenant.slug}`
+      },
       users: [
         {
           username: superAdminUser.username,

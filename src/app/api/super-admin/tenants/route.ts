@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       return {
         id: tenant.id,
         name: tenant.name,
-        domain: tenant.domain || `${tenant.slug}.pondokdigital.id`,
+        domain: `/yayasan/${tenant.slug}`, // Use path instead of domain for now
         plan: subscription?.tier?.toLowerCase() || 'trial',
         status: subscription?.status?.toLowerCase() || 'trial',
         users: tenant._count.users,

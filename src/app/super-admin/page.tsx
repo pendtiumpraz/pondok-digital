@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   BuildingOfficeIcon,
   UsersIcon,
-  CurrencyDollarIcon,
+  BanknotesIcon,
   ChartBarIcon,
   GlobeAltIcon,
   ExclamationTriangleIcon,
@@ -56,13 +56,46 @@ const SuperAdminDashboard = () => {
   const [sortBy, setSortBy] = useState<'name' | 'revenue' | 'users' | 'created'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+  const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<any>(null);
 
   const handleLogout = async () => {
     await signOut({ redirect: true, callbackUrl: '/auth/admin-signin' });
   };
 
-  // Mock data - in real app this would come from API
-  const [tenants] = useState<Tenant[]>([
+  // Fetch real data from API
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      // Fetch tenants
+      const tenantsRes = await fetch('/api/super-admin/tenants');
+      const tenantsData = await tenantsRes.json();
+      
+      // Fetch stats
+      const statsRes = await fetch('/api/super-admin/stats');
+      const statsData = await statsRes.json();
+      
+      if (tenantsData.success) {
+        setTenants(tenantsData.tenants);
+      }
+      
+      if (statsData.success) {
+        setStats(statsData.stats);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Keep mock data as fallback for now
+  const mockTenants = [
     {
       id: '1',
       name: 'TechCorp Solutions',
@@ -130,7 +163,41 @@ const SuperAdminDashboard = () => {
     },
   ]);
 
-  const stats = [
+  // Use real stats if available, otherwise use calculated stats
+  const displayStats = stats ? [
+    {
+      title: 'Total Tenants',
+      value: stats.tenants.total,
+      change: `+${stats.tenants.growth}%`,
+      changeType: 'increase' as const,
+      icon: BuildingOfficeIcon,
+      color: 'from-blue-500 to-indigo-600',
+    },
+    {
+      title: 'Active Users',
+      value: stats.users.total,
+      change: `+${stats.users.growth}%`,
+      changeType: 'increase' as const,
+      icon: UsersIcon,
+      color: 'from-emerald-500 to-green-600',
+    },
+    {
+      title: 'Monthly Revenue',
+      value: stats.revenue.monthly,
+      change: `+${stats.revenue.growth}%`,
+      changeType: 'increase' as const,
+      icon: BanknotesIcon,
+      color: 'from-purple-500 to-pink-600',
+    },
+    {
+      title: 'System Health',
+      value: stats.health.score,
+      change: '+0.1%',
+      changeType: 'increase' as const,
+      icon: ChartBarIcon,
+      color: 'from-orange-500 to-red-600',
+    },
+  ] : [
     {
       title: 'Total Tenants',
       value: tenants.length,
@@ -152,7 +219,7 @@ const SuperAdminDashboard = () => {
       value: tenants.filter(t => t.status === 'active').reduce((sum, t) => sum + t.revenue, 0) / 12,
       change: '+23%',
       changeType: 'increase' as const,
-      icon: CurrencyDollarIcon,
+      icon: BanknotesIcon,
       color: 'from-purple-500 to-pink-600',
     },
     {
