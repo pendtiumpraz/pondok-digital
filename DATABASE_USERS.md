@@ -55,26 +55,44 @@ curl -X GET "https://your-domain.com/api/users"
 - **Password**: `superadmin2024`
 - **Role**: `SUPER_ADMIN`
 - **Status**: Active
-- **Dibuat oleh**: `/api/auth/init` route
+- **Redirect**: `/super-admin`
 - **Akses**: Full system access, semua tenant/yayasan
 
-### 2. Admin User
+### 2. Admin Yayasan
 - **Username**: `admin`
 - **Email**: `admin@ponpesimamsyafii.id`
 - **Password**: `admin123`
 - **Role**: `ADMIN`
 - **Status**: Active
-- **Dibuat oleh**: `/api/auth/init` route
-- **Akses**: Full access untuk tenant/yayasan tertentu
+- **Redirect**: `/yayasan/imam-syafii/dashboard`
+- **Akses**: Full access untuk yayasan (semua menu)
 
-### 3. Staff User
+### 3. Ustadz/Teacher
+- **Username**: `ustadz`
+- **Email**: `ustadz@ponpesimamsyafii.id`
+- **Password**: `ustadz123`
+- **Role**: `TEACHER`
+- **Status**: Active
+- **Redirect**: `/yayasan/imam-syafii/dashboard`
+- **Akses**: Menu akademik, hafalan, jadwal mengajar
+
+### 4. Bendahara/Treasurer
+- **Username**: `bendahara`
+- **Email**: `bendahara@ponpesimamsyafii.id`
+- **Password**: `bendahara123`
+- **Role**: `TREASURER`
+- **Status**: Active
+- **Redirect**: `/yayasan/imam-syafii/dashboard`
+- **Akses**: Menu keuangan, SPP, unit usaha, laporan keuangan
+
+### 5. Staff Administrasi
 - **Username**: `staff`
 - **Email**: `staff@ponpesimamsyafii.id`
 - **Password**: `staff123`
 - **Role**: `STAFF`
 - **Status**: Active
-- **Dibuat oleh**: `/api/auth/init` route
-- **Akses**: Operasional terbatas
+- **Redirect**: `/yayasan/imam-syafii/dashboard`
+- **Akses**: Menu administrasi terbatas (data santri, kegiatan)
 
 ## Cara Membuat User Default
 
@@ -94,19 +112,36 @@ curl "https://your-domain.com/api/auth/init?secret=init-secret-2024"
       "username": "superadmin",
       "email": "superadmin@pondokdigital.id",
       "role": "SUPER_ADMIN",
-      "password": "superadmin2024"
+      "password": "superadmin2024",
+      "description": "Super Admin - Full system access"
     },
     {
       "username": "admin",
       "email": "admin@ponpesimamsyafii.id",
       "role": "ADMIN",
-      "password": "admin123"
+      "password": "admin123",
+      "description": "Admin Yayasan - Full yayasan access"
+    },
+    {
+      "username": "ustadz",
+      "email": "ustadz@ponpesimamsyafii.id",
+      "role": "TEACHER",
+      "password": "ustadz123",
+      "description": "Ustadz - Menu akademik & hafalan"
+    },
+    {
+      "username": "bendahara",
+      "email": "bendahara@ponpesimamsyafii.id",
+      "role": "TREASURER",
+      "password": "bendahara123",
+      "description": "Bendahara - Menu keuangan & usaha"
     },
     {
       "username": "staff",
       "email": "staff@ponpesimamsyafii.id", 
       "role": "STAFF",
-      "password": "staff123"
+      "password": "staff123",
+      "description": "Staff - Menu administrasi terbatas"
     }
   ]
 }
@@ -179,19 +214,34 @@ INIT_SECRET="init-secret-2024"  # Secret untuk API init
 ## Testing Login
 
 ### 1. Login sebagai Super Admin
-- **URL**: `/auth/admin-signin` atau `/auth/signin`
+- **URL**: `/auth/admin-signin`
 - **Username**: `superadmin`
 - **Password**: `superadmin2024`
+- **Redirect**: `/super-admin`
 
-### 2. Login sebagai Admin
-- **URL**: `/auth/admin-signin` atau `/auth/signin`
+### 2. Login sebagai Admin Yayasan
+- **URL**: `/auth/admin-signin` atau `/yayasan/imam-syafii/auth/signin`
 - **Username**: `admin`
 - **Password**: `admin123`
+- **Redirect**: `/yayasan/imam-syafii/dashboard` (semua menu)
 
-### 3. Login sebagai Staff
-- **URL**: `/auth/signin` 
+### 3. Login sebagai Ustadz
+- **URL**: `/yayasan/imam-syafii/auth/signin`
+- **Username**: `ustadz`
+- **Password**: `ustadz123`
+- **Redirect**: `/yayasan/imam-syafii/dashboard` (menu akademik & hafalan)
+
+### 4. Login sebagai Bendahara
+- **URL**: `/yayasan/imam-syafii/auth/signin`
+- **Username**: `bendahara`
+- **Password**: `bendahara123`
+- **Redirect**: `/yayasan/imam-syafii/dashboard` (menu keuangan)
+
+### 5. Login sebagai Staff
+- **URL**: `/yayasan/imam-syafii/auth/signin`
 - **Username**: `staff`
 - **Password**: `staff123`
+- **Redirect**: `/yayasan/imam-syafii/dashboard` (menu terbatas)
 
 ## Commands Berguna
 

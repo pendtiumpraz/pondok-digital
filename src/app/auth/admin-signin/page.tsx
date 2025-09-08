@@ -39,13 +39,12 @@ export default function AdminSignInPage() {
         const session = await response.json()
         
         if (session?.user?.role === 'SUPER_ADMIN') {
+          // Super admin goes to super admin dashboard
           router.push('/super-admin')
-        } else if (session?.user?.role === 'ADMIN') {
-          // Admin should go to their yayasan dashboard
-          router.push('/yayasan/imam-syafii/dashboard')
         } else {
-          // Staff or other roles go to default dashboard
-          router.push('/dashboard')
+          // ALL OTHER ROLES (Admin, Staff, Ustadz, Bendahara, etc) go to yayasan dashboard
+          // The dashboard will show different menus based on their role
+          router.push('/yayasan/imam-syafii/dashboard')
         }
       }
     } catch (error) {

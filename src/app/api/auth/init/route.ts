@@ -77,28 +77,75 @@ export async function GET(request: NextRequest) {
       adminUser = existingAdmin;
     }
     
-    // Check if staff user exists
-    const existingStaff = await prisma.user.findUnique({
-      where: { username: 'staff' }
-    });
+    // Create multiple role users for testing
+    const users = [
+      {
+        username: 'ustadz',
+        email: 'ustadz@ponpesimamsyafii.id',
+        password: 'ustadz123',
+        name: 'Ustadz Ahmad',
+        role: 'TEACHER',
+        isUstadz: true
+      },
+      {
+        username: 'bendahara',
+        email: 'bendahara@ponpesimamsyafii.id',
+        password: 'bendahara123',
+        name: 'Bendahara Pesantren',
+        role: 'TREASURER',
+        isUstadz: false
+      },
+      {
+        username: 'staff',
+        email: 'staff@ponpesimamsyafii.id',
+        password: 'staff123',
+        name: 'Staff Administrasi',
+        role: 'STAFF',
+        isUstadz: false
+      }
+    ];
+
+    const createdUsers = [];
     
-    // Create staff user for testing
-    const staffPassword = await bcrypt.hash('staff123', 10);
-    
-    let staffUser;
-    if (!existingStaff) {
-      staffUser = await prisma.user.create({
-        data: {
-          username: 'staff',
-          email: 'staff@ponpesimamsyafii.id',
-          password: staffPassword,
-          name: 'Staff User',
-          role: 'STAFF',
-          isActive: true
-        }
+    for (const userData of users) {
+      const existing = await prisma.user.findUnique({
+        where: { username: userData.username }
       });
-    } else {
-      staffUser = existingStaff;
+      
+      const hashedPwd = await bcrypt.hash(userData.password, 10);
+      
+      if (!existing) {
+        const newUser = await prisma.user.create({
+          data: {
+            ...userData,
+            password: hashedPwd,
+            isActive: true
+          }
+        });
+        createdUsers.push({
+          username: newUser.username,
+          email: newUser.email,
+          role: newUser.role,
+          password: userData.password // Original password for display
+        });
+      } else {
+        // Update existing user
+        await prisma.user.update({
+          where: { username: userData.username },
+          data: {
+            password: hashedPwd,
+            role: userData.role,
+            isUstadz: userData.isUstadz,
+            isActive: true
+          }
+        });
+        createdUsers.push({
+          username: existing.username,
+          email: existing.email,
+          role: userData.role,
+          password: userData.password
+        });
+      }
     }
     
     return NextResponse.json({
@@ -109,20 +156,22 @@ export async function GET(request: NextRequest) {
           username: superAdminUser.username,
           email: superAdminUser.email,
           role: superAdminUser.role,
-          password: 'superadmin2024'
+          password: 'superadmin2024',
+          description: 'Super Admin - Full system access'
         },
         {
           username: adminUser.username,
           email: adminUser.email,
           role: adminUser.role,
-          password: 'admin123'
+          password: 'admin123',
+          description: 'Admin Yayasan - Full yayasan access'
         },
-        {
-          username: staffUser.username,
-          email: staffUser.email,
-          role: staffUser.role,
-          password: 'staff123'
-        }
+        ...createdUsers.map(user => ({
+          ...user,
+          description: user.role === 'TEACHER' ? 'Ustadz - Menu akademik & hafalan' :
+                      user.role === 'TREASURER' ? 'Bendahara - Menu keuangan & usaha' :
+                      'Staff - Menu administrasi terbatas'
+        }))
       ]
     });
   } catch (error) {
